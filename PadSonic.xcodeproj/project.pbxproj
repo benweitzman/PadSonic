@@ -1,0 +1,467 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DA1B48721620E0F60039246A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1B48711620E0F60039246A /* UIKit.framework */; };
+		DA1B48741620E0F60039246A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1B48731620E0F60039246A /* Foundation.framework */; };
+		DA1B48761620E0F60039246A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1B48751620E0F60039246A /* CoreGraphics.framework */; };
+		DA1B487C1620E0F60039246A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA1B487A1620E0F60039246A /* InfoPlist.strings */; };
+		DA1B487E1620E0F60039246A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1B487D1620E0F60039246A /* main.m */; };
+		DA1B48821620E0F60039246A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1B48811620E0F60039246A /* AppDelegate.m */; };
+		DA1B48851620E0F60039246A /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA1B48831620E0F60039246A /* MainStoryboard_iPhone.storyboard */; };
+		DA1B48881620E0F60039246A /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA1B48861620E0F60039246A /* MainStoryboard_iPad.storyboard */; };
+		DA1B488B1620E0F60039246A /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1B488A1620E0F60039246A /* MasterViewController.m */; };
+		DA1B488E1620E0F60039246A /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1B488D1620E0F60039246A /* DetailViewController.m */; };
+		DA1B48961620E0F60039246A /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1B48951620E0F60039246A /* SenTestingKit.framework */; };
+		DA1B48971620E0F60039246A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1B48711620E0F60039246A /* UIKit.framework */; };
+		DA1B48981620E0F60039246A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1B48731620E0F60039246A /* Foundation.framework */; };
+		DA1B48A01620E0F70039246A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA1B489E1620E0F70039246A /* InfoPlist.strings */; };
+		DA1B48A31620E0F70039246A /* PadSonicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1B48A21620E0F70039246A /* PadSonicTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DA1B48991620E0F60039246A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA1B48641620E0F60039246A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DA1B486C1620E0F60039246A;
+			remoteInfo = PadSonic;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DA1B486D1620E0F60039246A /* PadSonic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PadSonic.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA1B48711620E0F60039246A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DA1B48731620E0F60039246A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DA1B48751620E0F60039246A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		DA1B48791620E0F60039246A /* PadSonic-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PadSonic-Info.plist"; sourceTree = "<group>"; };
+		DA1B487B1620E0F60039246A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA1B487D1620E0F60039246A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DA1B487F1620E0F60039246A /* PadSonic-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PadSonic-Prefix.pch"; sourceTree = "<group>"; };
+		DA1B48801620E0F60039246A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		DA1B48811620E0F60039246A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		DA1B48841620E0F60039246A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		DA1B48871620E0F60039246A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		DA1B48891620E0F60039246A /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
+		DA1B488A1620E0F60039246A /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
+		DA1B488C1620E0F60039246A /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		DA1B488D1620E0F60039246A /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		DA1B48941620E0F60039246A /* PadSonicTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PadSonicTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA1B48951620E0F60039246A /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		DA1B489D1620E0F70039246A /* PadSonicTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PadSonicTests-Info.plist"; sourceTree = "<group>"; };
+		DA1B489F1620E0F70039246A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DA1B48A11620E0F70039246A /* PadSonicTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PadSonicTests.h; sourceTree = "<group>"; };
+		DA1B48A21620E0F70039246A /* PadSonicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PadSonicTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DA1B486A1620E0F60039246A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1B48721620E0F60039246A /* UIKit.framework in Frameworks */,
+				DA1B48741620E0F60039246A /* Foundation.framework in Frameworks */,
+				DA1B48761620E0F60039246A /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA1B48901620E0F60039246A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1B48961620E0F60039246A /* SenTestingKit.framework in Frameworks */,
+				DA1B48971620E0F60039246A /* UIKit.framework in Frameworks */,
+				DA1B48981620E0F60039246A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DA1B48621620E0F60039246A = {
+			isa = PBXGroup;
+			children = (
+				DA1B48771620E0F60039246A /* PadSonic */,
+				DA1B489B1620E0F60039246A /* PadSonicTests */,
+				DA1B48701620E0F60039246A /* Frameworks */,
+				DA1B486E1620E0F60039246A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DA1B486E1620E0F60039246A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DA1B486D1620E0F60039246A /* PadSonic.app */,
+				DA1B48941620E0F60039246A /* PadSonicTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DA1B48701620E0F60039246A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DA1B48711620E0F60039246A /* UIKit.framework */,
+				DA1B48731620E0F60039246A /* Foundation.framework */,
+				DA1B48751620E0F60039246A /* CoreGraphics.framework */,
+				DA1B48951620E0F60039246A /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DA1B48771620E0F60039246A /* PadSonic */ = {
+			isa = PBXGroup;
+			children = (
+				DA1B48801620E0F60039246A /* AppDelegate.h */,
+				DA1B48811620E0F60039246A /* AppDelegate.m */,
+				DA1B48831620E0F60039246A /* MainStoryboard_iPhone.storyboard */,
+				DA1B48861620E0F60039246A /* MainStoryboard_iPad.storyboard */,
+				DA1B48891620E0F60039246A /* MasterViewController.h */,
+				DA1B488A1620E0F60039246A /* MasterViewController.m */,
+				DA1B488C1620E0F60039246A /* DetailViewController.h */,
+				DA1B488D1620E0F60039246A /* DetailViewController.m */,
+				DA1B48781620E0F60039246A /* Supporting Files */,
+			);
+			path = PadSonic;
+			sourceTree = "<group>";
+		};
+		DA1B48781620E0F60039246A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DA1B48791620E0F60039246A /* PadSonic-Info.plist */,
+				DA1B487A1620E0F60039246A /* InfoPlist.strings */,
+				DA1B487D1620E0F60039246A /* main.m */,
+				DA1B487F1620E0F60039246A /* PadSonic-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DA1B489B1620E0F60039246A /* PadSonicTests */ = {
+			isa = PBXGroup;
+			children = (
+				DA1B48A11620E0F70039246A /* PadSonicTests.h */,
+				DA1B48A21620E0F70039246A /* PadSonicTests.m */,
+				DA1B489C1620E0F70039246A /* Supporting Files */,
+			);
+			path = PadSonicTests;
+			sourceTree = "<group>";
+		};
+		DA1B489C1620E0F70039246A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DA1B489D1620E0F70039246A /* PadSonicTests-Info.plist */,
+				DA1B489E1620E0F70039246A /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DA1B486C1620E0F60039246A /* PadSonic */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA1B48A61620E0F70039246A /* Build configuration list for PBXNativeTarget "PadSonic" */;
+			buildPhases = (
+				DA1B48691620E0F60039246A /* Sources */,
+				DA1B486A1620E0F60039246A /* Frameworks */,
+				DA1B486B1620E0F60039246A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PadSonic;
+			productName = PadSonic;
+			productReference = DA1B486D1620E0F60039246A /* PadSonic.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DA1B48931620E0F60039246A /* PadSonicTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DA1B48A91620E0F70039246A /* Build configuration list for PBXNativeTarget "PadSonicTests" */;
+			buildPhases = (
+				DA1B488F1620E0F60039246A /* Sources */,
+				DA1B48901620E0F60039246A /* Frameworks */,
+				DA1B48911620E0F60039246A /* Resources */,
+				DA1B48921620E0F60039246A /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DA1B489A1620E0F60039246A /* PBXTargetDependency */,
+			);
+			name = PadSonicTests;
+			productName = PadSonicTests;
+			productReference = DA1B48941620E0F60039246A /* PadSonicTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DA1B48641620E0F60039246A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Ben Weitzman";
+			};
+			buildConfigurationList = DA1B48671620E0F60039246A /* Build configuration list for PBXProject "PadSonic" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DA1B48621620E0F60039246A;
+			productRefGroup = DA1B486E1620E0F60039246A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DA1B486C1620E0F60039246A /* PadSonic */,
+				DA1B48931620E0F60039246A /* PadSonicTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DA1B486B1620E0F60039246A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1B487C1620E0F60039246A /* InfoPlist.strings in Resources */,
+				DA1B48851620E0F60039246A /* MainStoryboard_iPhone.storyboard in Resources */,
+				DA1B48881620E0F60039246A /* MainStoryboard_iPad.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA1B48911620E0F60039246A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1B48A01620E0F70039246A /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DA1B48921620E0F60039246A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DA1B48691620E0F60039246A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1B487E1620E0F60039246A /* main.m in Sources */,
+				DA1B48821620E0F60039246A /* AppDelegate.m in Sources */,
+				DA1B488B1620E0F60039246A /* MasterViewController.m in Sources */,
+				DA1B488E1620E0F60039246A /* DetailViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA1B488F1620E0F60039246A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA1B48A31620E0F70039246A /* PadSonicTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DA1B489A1620E0F60039246A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DA1B486C1620E0F60039246A /* PadSonic */;
+			targetProxy = DA1B48991620E0F60039246A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DA1B487A1620E0F60039246A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DA1B487B1620E0F60039246A /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		DA1B48831620E0F60039246A /* MainStoryboard_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DA1B48841620E0F60039246A /* en */,
+			);
+			name = MainStoryboard_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		DA1B48861620E0F60039246A /* MainStoryboard_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DA1B48871620E0F60039246A /* en */,
+			);
+			name = MainStoryboard_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		DA1B489E1620E0F70039246A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DA1B489F1620E0F70039246A /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DA1B48A41620E0F70039246A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DA1B48A51620E0F70039246A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		DA1B48A71620E0F70039246A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PadSonic/PadSonic-Prefix.pch";
+				INFOPLIST_FILE = "PadSonic/PadSonic-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		DA1B48A81620E0F70039246A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PadSonic/PadSonic-Prefix.pch";
+				INFOPLIST_FILE = "PadSonic/PadSonic-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		DA1B48AA1620E0F70039246A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/PadSonic.app/PadSonic";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PadSonic/PadSonic-Prefix.pch";
+				INFOPLIST_FILE = "PadSonicTests/PadSonicTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		DA1B48AB1620E0F70039246A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/PadSonic.app/PadSonic";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PadSonic/PadSonic-Prefix.pch";
+				INFOPLIST_FILE = "PadSonicTests/PadSonicTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DA1B48671620E0F60039246A /* Build configuration list for PBXProject "PadSonic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA1B48A41620E0F70039246A /* Debug */,
+				DA1B48A51620E0F70039246A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DA1B48A61620E0F70039246A /* Build configuration list for PBXNativeTarget "PadSonic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA1B48A71620E0F70039246A /* Debug */,
+				DA1B48A81620E0F70039246A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		DA1B48A91620E0F70039246A /* Build configuration list for PBXNativeTarget "PadSonicTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA1B48AA1620E0F70039246A /* Debug */,
+				DA1B48AB1620E0F70039246A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DA1B48641620E0F60039246A /* Project object */;
+}
