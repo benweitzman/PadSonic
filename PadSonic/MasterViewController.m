@@ -8,7 +8,9 @@
 
 #import "MasterViewController.h"
 
-#import "DetailViewController.h"
+
+#import "JSONKit.h"
+#import "SVProgressHUD.h"
 
 @interface MasterViewController () {
     NSMutableArray *_objects;
@@ -16,6 +18,7 @@
 @end
 
 @implementation MasterViewController
+@synthesize sections;
 
 - (void)awakeFromNib
 {
@@ -31,10 +34,37 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
     self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    self.detailViewController.settingsDelegate = self;
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    CGRect frame = self.view.bounds;
+    gradient.frame = CGRectMake(frame.size.width-30, 0, 30, frame.size.height);
+    gradient.colors = [NSArray arrayWithObjects:
+                       (id)[[UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.8 ] CGColor]
+                       , (id)[[UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.8 ] CGColor]
+                       , (id)[[UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.8 ] CGColor]
+                       , (id)[[UIColor blackColor] CGColor]
+                       , (id)[[UIColor blackColor] CGColor], nil];
+    UIImageView *gradView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"grad.png"]];
+    gradView.frame = CGRectMake(frame.size.width-30, 0, 30, frame.size.height);
+    [self.view addSubview:gradView];
+ 
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [[SubsonicRequestManager sharedInstance] pingServerWithDelegate:self];
+    CGRect frame = self.view.bounds;
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = CGRectMake(frame.size.width-10, self.navigationController.navigationBar.frame.size.height, 10, frame.size.height);
+    gradient.colors = [NSArray arrayWithObjects:
+                       (id)[[UIColor colorWithRed:0 green:0 blue:0 alpha:0] CGColor],
+                       (id)[[UIColor colorWithRed:0 green:0 blue:0 alpha:0.1] CGColor],
+                       (id)[[UIColor colorWithRed:0 green:0 blue:0 alpha:.3] CGColor], nil];
+    gradient.startPoint = CGPointMake(0, 0);
+    gradient.endPoint = CGPointMake(1,0);
+    [self.navigationController.view.layer addSublayer:gradient];
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,27 +87,39 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return [[sections allKeys] count];
+}
+
+- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
+    return [[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
+    return index;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _objects.count;
+    return [sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][section]] count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return [[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
-    NSDate *object = _objects[indexPath.row];
-    cell.textLabel.text = [object description];
+    NSDictionary *artist = sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]][indexPath.row];
+    cell.textLabel.text = [artist objectForKey:@"name"];
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -109,8 +151,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        NSDate *object = _objects[indexPath.row];
-        self.detailViewController.detailItem = object;
+        NSDictionary *artist = sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]][indexPath.row];
+        self.detailViewController.detailItem = artist;
     }
 }
 
@@ -121,6 +163,37 @@
         NSDate *object = _objects[indexPath.row];
         [[segue destinationViewController] setDetailItem:object];
     }
+}
+
+#pragma mark - SubsonicArtistSectionsRequestProtocol
+
+- (void) artistSectionsRequestDidFail {
+}
+
+- (void) artistSectionsRequestDidSucceedWithSections:(NSDictionary *)artistSections {
+    sections = artistSections;
+    [self.tableView reloadData];
+}
+
+#pragma mark - SubsonicPingRequestProtocol
+
+
+- (void) pingRequestDidFailWithError:(SubsonicServerError)error {
+    if (error == ServerErrorBadCredentials) {
+       [SVProgressHUD showErrorWithStatus:@"Incorrect username or password"];
+    } else {
+       [SVProgressHUD showErrorWithStatus:@"Error connecting to server"];
+    }
+}
+
+- (void) pingRequestDidSucceed {
+    [[SubsonicRequestManager sharedInstance] getArtistSectionsForMusicFolder:0 delegate:self];
+}
+
+#pragma mark - SettingsUpdateProtocol
+
+- (void) didUpdateSettingsToSettingsObject:(SettingsObject *)settingsObject {
+    [[SubsonicRequestManager sharedInstance] pingServerWithDelegate:self];
 }
 
 @end

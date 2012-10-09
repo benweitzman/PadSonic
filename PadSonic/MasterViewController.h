@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SubsonicRequestManager.h"
+#import "DetailViewController.h"
 
-@class DetailViewController;
-
-@interface MasterViewController : UITableViewController
+@interface MasterViewController : UITableViewController <SubsonicArtistSectionsRequestDelegate, SubsonicPingRequestDelegate, SettingsUpdateProtocol>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
+
+//@property (strong, nonatomic) NSMutableArray *artists;
+@property (strong, nonatomic) NSDictionary *sections;
 
 @end

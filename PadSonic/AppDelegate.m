@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "SSKeychain.h"
 
 @implementation AppDelegate
 
@@ -17,6 +18,14 @@
         UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
         UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
         splitViewController.delegate = (id)navigationController.topViewController;
+    }
+    if ([[SSKeychain allAccounts] count]>0) {
+        NSString *server = [[NSUserDefaults standardUserDefaults] objectForKey:@"server"];
+        NSString *username = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
+        NSString *password = [SSKeychain passwordForService:server account:username];
+        [[SubsonicRequestManager sharedInstance] setServer:server];
+        [[SubsonicRequestManager sharedInstance] setUsername:username];
+        [[SubsonicRequestManager sharedInstance] setPassword:password];
     }
     return YES;
 }
