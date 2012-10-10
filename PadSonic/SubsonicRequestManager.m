@@ -24,7 +24,7 @@
     dispatch_once(&pred, ^{
         _sharedObject = [[self alloc] init]; // or some other init method
         ((SubsonicRequestManager *)_sharedObject).cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-        NSLog(@"%@",((SubsonicRequestManager *)_sharedObject).cacheDirectory);
+        //NSLog(@"%@",((SubsonicRequestManager *)_sharedObject).cacheDirectory);
     });
     return _sharedObject;
 }
@@ -38,7 +38,19 @@
         NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:artistSectionsResponse];
         NSMutableDictionary *sections = [[NSMutableDictionary alloc] init];
         for (NSDictionary *index in subsonicResponse[@"subsonic-response"][@"indexes"][@"index"]) {
-            sections[index[@"name"]] = index[@"artist"];
+            if ([index[@"artist"] isKindOfClass:[NSArray class]]) {
+                sections[index[@"name"]] = [index[@"artist"] mutableCopy];
+            } else {
+                sections[index[@"name"]] = [@[index[@"artist"]] mutableCopy];
+            }
+        }
+        for (NSDictionary *child in subsonicResponse[@"subsonic-response"][@"indexes"][@"child"]) {
+            unichar firstLetter = [((NSString *)child[@"title"])characterAtIndex:0];
+            if (sections[[NSString stringWithCharacters:&firstLetter length:1]]) {
+                NSMutableDictionary *object = [child mutableCopy];
+                object[@"name"] = object[@"title"];
+                [sections[[NSString stringWithCharacters:&firstLetter length:1]] addObject:object];
+            }
         }
         [delegate performSelectorOnMainThread:@selector(artistSectionsRequestDidSucceedWithSections:) withObject:sections waitUntilDone:NO];
     });
@@ -52,7 +64,11 @@
         NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:artistAlbumResponse];
         NSObject *albumsObject = subsonicResponse[@"subsonic-response"][@"directory"][@"child"];
         if ([albumsObject isKindOfClass:[NSArray class]]) {
-            [delegate performSelectorOnMainThread:@selector(artistAlbumsRequestDidSucceedWithAlbums:) withObject:albumsObject waitUntilDone:NO];
+            if ([((NSArray*)albumsObject)[0][@"isDir"] intValue])
+                [delegate performSelectorOnMainThread:@selector(artistAlbumsRequestDidSucceedWithAlbums:) withObject:albumsObject waitUntilDone:NO];
+            else {
+                [delegate performSelectorOnMainThread:@selector(artistAlbumsRequestDidSucceedWithAlbums:) withObject:@[subsonicResponse[@"subsonic-response"][@"directory"]] waitUntilDone:NO];
+            }
         } else {
             [delegate performSelectorOnMainThread:@selector(artistAlbumsRequestDidSucceedWithAlbums:) withObject:@[albumsObject] waitUntilDone:NO];
         }
@@ -82,21 +98,43 @@
         NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:artistAlbumsResponse];
         NSObject *albumsObject = subsonicResponse[@"subsonic-response"][@"directory"][@"child"];
         NSArray *albums;
-        if ([albumsObject isKindOfClass:[NSArray class]]) {
-            albums = (NSArray*)albumsObject;
-        } else {
-            albums = @[albumsObject];
-        }
         NSMutableDictionary *songs = [[NSMutableDictionary alloc] init];
+        if ([albumsObject isKindOfClass:[NSArray class]]) {
+            if ([((NSArray*)albumsObject)[0][@"isDir"] intValue]) {
+                albums = (NSArray*)albumsObject;
+            } else {
+                NSDictionary *album = subsonicResponse[@"subsonic-response"][@"directory"];
+                songs[album[@"name"]] = album[@"child"];
+                [delegate performSelectorOnMainThread:@selector(artistSongsRequestDidSucceedWithSongs:) withObject:songs waitUntilDone:NO];
+            }
+        } else {
+            //NSLog(@"sr: %@",subsonicResponse);
+            if ([((NSDictionary*)albumsObject)[@"isDir"] intValue]) {
+                albums = @[albumsObject];
+            } else {
+                NSDictionary *album = subsonicResponse[@"subsonic-response"][@"directory"];
+                songs[album[@"name"]] = album[@"child"];
+                if (![album[@"child"] isKindOfClass:[NSArray class]])
+                    songs[album[@"name"]] = @[album[@"child"]];
+                [delegate performSelectorOnMainThread:@selector(artistSongsRequestDidSucceedWithSongs:) withObject:songs waitUntilDone:NO];
+            }
+            
+        }
         for (NSDictionary *album in albums) {
             NSString *songsURLString = [NSString stringWithFormat:@"http://%@/rest/getMusicDirectory.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&id=%@", server, username, password, album[@"id"]];
             NSData *albumSongsResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:songsURLString]];
             NSDictionary *subsonicResponse2 = [[JSONDecoder decoder] objectWithData:albumSongsResponse];
+
+            NSString *sectionIndex = album[@"title"];
+            if (!album[@"title"]) sectionIndex = album[@"name"];
+            //NSLog(@"album: %@",album);
             NSObject *albumSongs = subsonicResponse2[@"subsonic-response"][@"directory"][@"child"];
+           //if (subsonicResponse2[@"child"]) albumSongs = subsonicResponse2[@"child"];
+            //NSLog(@"sr2 %@",subsonicResponse2);
             if ([albumSongs isKindOfClass:[NSArray class]]) {
                 songs[album[@"title"]] = (NSArray *)albumSongs;
             } else {
-                songs[album[@"title"]] = @[albumSongs];
+                songs[sectionIndex] = @[albumSongs];
             }
         }
         [delegate performSelectorOnMainThread:@selector(artistSongsRequestDidSucceedWithSongs:) withObject:songs waitUntilDone:NO];
@@ -106,7 +144,8 @@
 - (void) getCoverArtForID:(NSString *)coverID delegate:(NSObject<SubsonicAlbumCoverRequestDelegate> *)delegate {
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
-        NSString* cachePath = [cacheDirectory stringByAppendingPathComponent:coverID];
+        //NSLog(@"%@",cacheDirectory);
+        NSString* cachePath = [cacheDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@",coverID]];
         if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath]) {
             NSString *coverURLString = [NSString stringWithFormat:@"http://%@/rest/getCoverArt.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&id=%@&size=500", server, username, password, coverID];
             NSData *coverResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:coverURLString]];
@@ -129,7 +168,7 @@
             [delegate performSelectorOnMainThread:@selector(pingRequestDidFailWithError:) withObject:@(ServerErrorBadConnection) waitUntilDone:NO];
         } else {
             NSDictionary * subsonicResponse = [[JSONDecoder decoder] objectWithData:pingResponse];
-            NSLog(@"%@",subsonicResponse);
+            //NSLog(@"%@",subsonicResponse);
             if ([subsonicResponse[@"subsonic-response"][@"status"] isEqualToString:@"ok"]) {
                 [delegate performSelectorOnMainThread:@selector(pingRequestDidSucceed) withObject:nil waitUntilDone:NO];
             } else {
@@ -170,6 +209,20 @@
         (void)pingResponse;
         dispatch_async( dispatch_get_main_queue(), ^{
             [delegate resetSessionDidFinish];
+        });
+    });
+}
+
+- (void) requestMusicFoldersWithDelegate:(NSObject<SubsonicMusicFoldersRequestDelegate> *)delegate {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        //NSLog(@"hello");
+        NSString *folderURLString = [NSString stringWithFormat:@"http://%@/rest/getMusicFolders.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld",server,username,password];
+        NSData *folderResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:folderURLString]];
+        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:folderResponse];
+        //NSLog(@"%@",subsonicResponse);
+        dispatch_async( dispatch_get_main_queue(), ^{
+            [delegate musicFolderRequestDidSucceedWithFolders:subsonicResponse[@"subsonic-response"][@"musicFolders"][@"musicFolder"]];
         });
     });
 }

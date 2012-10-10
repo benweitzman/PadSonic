@@ -28,6 +28,9 @@
 		DA1B48A01620E0F70039246A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DA1B489E1620E0F70039246A /* InfoPlist.strings */; };
 		DA1B48A31620E0F70039246A /* PadSonicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1B48A21620E0F70039246A /* PadSonicTests.m */; };
 		DA1B48AD1620E4000039246A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA1B48AC1620E4000039246A /* AVFoundation.framework */; };
+		DA2D963D1624F4D10099965C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA2D963C1624F4D10099965C /* MediaPlayer.framework */; };
+		DA2D9641162545B70099965C /* glyphicons_172_rewind.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2D963F162545B70099965C /* glyphicons_172_rewind.png */; };
+		DA2D9642162545B70099965C /* glyphicons_176_forward.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2D9640162545B70099965C /* glyphicons_176_forward.png */; };
 		DA3C92831621DFC400731F24 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA3C92821621DFC400731F24 /* QuartzCore.framework */; };
 		DA3C92911621EBC400731F24 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = DA3C928E1621EBC400731F24 /* readme.txt */; };
 		DA3C92921621EBC400731F24 /* retina_wood.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3C928F1621EBC400731F24 /* retina_wood.png */; };
@@ -110,6 +113,7 @@
 		DA3C937D162394C800731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3C937C162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m */; };
 		DA3C93821623B13A00731F24 /* transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3C93811623B13A00731F24 /* transparent.png */; };
 		DAAE66771623D42F00376108 /* grad.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE66761623D42F00376108 /* grad.png */; };
+		DAAE66871624C45200376108 /* SelectMusicFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAE66861624C45200376108 /* SelectMusicFolderViewController.m */; };
 		DAB1E15116215D3C00830968 /* AudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB1E15016215D3C00830968 /* AudioStreamer.m */; };
 		DAB1E15416215E0900830968 /* AudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB1E15016215D3C00830968 /* AudioStreamer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DAB1E15616215ECE00830968 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAB1E15516215ECE00830968 /* CFNetwork.framework */; };
@@ -158,6 +162,9 @@
 		DA1B48A11620E0F70039246A /* PadSonicTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PadSonicTests.h; sourceTree = "<group>"; };
 		DA1B48A21620E0F70039246A /* PadSonicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PadSonicTests.m; sourceTree = "<group>"; };
 		DA1B48AC1620E4000039246A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		DA2D963C1624F4D10099965C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		DA2D963F162545B70099965C /* glyphicons_172_rewind.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_172_rewind.png; sourceTree = "<group>"; };
+		DA2D9640162545B70099965C /* glyphicons_176_forward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_176_forward.png; sourceTree = "<group>"; };
 		DA3C92821621DFC400731F24 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DA3C928E1621EBC400731F24 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		DA3C928F1621EBC400731F24 /* retina_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = retina_wood.png; sourceTree = "<group>"; };
@@ -283,6 +290,8 @@
 		DA3C937C162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutomaticDismissKeyboardNavigationControllerViewController.m; sourceTree = "<group>"; };
 		DA3C93811623B13A00731F24 /* transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = transparent.png; sourceTree = "<group>"; };
 		DAAE66761623D42F00376108 /* grad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grad.png; sourceTree = "<group>"; };
+		DAAE66851624C45200376108 /* SelectMusicFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectMusicFolderViewController.h; sourceTree = "<group>"; };
+		DAAE66861624C45200376108 /* SelectMusicFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectMusicFolderViewController.m; sourceTree = "<group>"; };
 		DAB1E14F16215D3C00830968 /* AudioStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioStreamer.h; sourceTree = "<group>"; };
 		DAB1E15016215D3C00830968 /* AudioStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioStreamer.m; sourceTree = "<group>"; };
 		DAB1E15516215ECE00830968 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -295,6 +304,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA2D963D1624F4D10099965C /* MediaPlayer.framework in Frameworks */,
 				DA3C937516235E9800731F24 /* Security.framework in Frameworks */,
 				DA3C92831621DFC400731F24 /* QuartzCore.framework in Frameworks */,
 				DAB1E15816215EF200830968 /* AudioToolbox.framework in Frameworks */,
@@ -385,6 +395,7 @@
 		DA1B48701620E0F60039246A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA2D963C1624F4D10099965C /* MediaPlayer.framework */,
 				DA3C937416235E9800731F24 /* Security.framework */,
 				DA3C92821621DFC400731F24 /* QuartzCore.framework */,
 				DAB1E15716215EF200830968 /* AudioToolbox.framework */,
@@ -406,6 +417,8 @@
 				DA1B48811620E0F60039246A /* AppDelegate.m */,
 				DA1B48831620E0F60039246A /* MainStoryboard_iPhone.storyboard */,
 				DA1B48861620E0F60039246A /* MainStoryboard_iPad.storyboard */,
+				DAAE66851624C45200376108 /* SelectMusicFolderViewController.h */,
+				DAAE66861624C45200376108 /* SelectMusicFolderViewController.m */,
 				DA3C937B162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.h */,
 				DA3C937C162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m */,
 				DA053B00162110F900E829C1 /* AlbumCell.h */,
@@ -513,6 +526,8 @@
 		DA3C92DA1621F79000731F24 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DA2D963F162545B70099965C /* glyphicons_172_rewind.png */,
+				DA2D9640162545B70099965C /* glyphicons_176_forward.png */,
 				DA3C93651622989F00731F24 /* glyphicons_184_volume_up.png */,
 				DA3C936316225D9200731F24 /* glyphicons_158_playlist.png */,
 				DA3C92D61621F78B00731F24 /* glyphicons_173_play.png */,
@@ -773,6 +788,8 @@
 				DA3C936B162345AF00731F24 /* SVProgressHUD.bundle in Resources */,
 				DA3C93821623B13A00731F24 /* transparent.png in Resources */,
 				DAAE66771623D42F00376108 /* grad.png in Resources */,
+				DA2D9641162545B70099965C /* glyphicons_172_rewind.png in Resources */,
+				DA2D9642162545B70099965C /* glyphicons_176_forward.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -852,6 +869,7 @@
 				DA3C936216224DBB00731F24 /* PlaylistViewController.m in Sources */,
 				DA3C936C162345AF00731F24 /* SVProgressHUD.m in Sources */,
 				DA3C937D162394C800731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m in Sources */,
+				DAAE66871624C45200376108 /* SelectMusicFolderViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

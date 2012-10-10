@@ -45,7 +45,7 @@
     [super viewDidLoad];
     servers = [[NSMutableSet alloc] init];
     usernames = [[NSMutableSet alloc] init];
-    NSLog(@"%@",[SSKeychain allAccounts]);
+    //NSLog(@"%@",[SSKeychain allAccounts]);
     for (NSDictionary *account in [SSKeychain allAccounts]) {
         [servers addObject:account[@"svce"]];
     }
@@ -65,7 +65,7 @@
     [self viewWillAppear:NO];
   
     [self.formModel loadFieldsWithObject:setObj];
-    NSLog(@"%@",servers);
+    //NSLog(@"%@",servers);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -124,7 +124,7 @@
 }
 
 - (void) pingServerWithObject:(SettingsObject *)settingsObject {
-    NSLog(@"%@, %@, %@",settingsObject.server,settingsObject.username,settingsObject.password);
+    //NSLog(@"%@, %@, %@",settingsObject.server,settingsObject.username,settingsObject.password);
     if (settingsObject.server && settingsObject.username && settingsObject.password) {
         [[SubsonicRequestManager sharedInstance] setServer:settingsObject.server];
         [[SubsonicRequestManager sharedInstance] setUsername:settingsObject.username];
@@ -202,9 +202,9 @@
 - (void) pingRequestDidSucceed {
     [SVProgressHUD showSuccessWithStatus:@"Connected to server"];
     [SSKeychain setPassword:setObj.password forService:setObj.server account:setObj.username];
-    NSLog(@"%@",[SSKeychain allAccounts]);
+    //NSLog(@"%@",[SSKeychain allAccounts]);
     if ([[SSKeychain allAccounts] count] == 1 || ([[NSUserDefaults standardUserDefaults] objectForKey:@"server"] == setObj.server && [[NSUserDefaults standardUserDefaults] objectForKey:@"username"] == setObj.username)) {
-        NSLog(@"make default");
+        //NSLog(@"make default");
         [[NSUserDefaults standardUserDefaults] setObject:setObj.server forKey:@"server"];
         [[NSUserDefaults standardUserDefaults] setObject:setObj.username forKey:@"username"];
     } else {
@@ -260,7 +260,7 @@
                 [[NSUserDefaults standardUserDefaults] setObject:setObj.server forKey:@"server"];
                 [[NSUserDefaults standardUserDefaults] setObject:setObj.username forKey:@"username"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                NSLog(@"hello");
+                //NSLog(@"hello");
             }];
             [self.formModel registerMapping:mapping];
         }];
@@ -276,7 +276,6 @@
 
 - (IBAction)close:(id)sender {
     [self.formModel save];
-    SettingsObject *obj = [self.formModel object];
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         [delegate didUpdateSettingsToSettingsObject:[self.formModel object]];
     }];

@@ -18,11 +18,12 @@ typedef enum {
     ServerErrorUnknownError
 } SubsonicServerError;
 
-@protocol SubsonicArtistSectionsRequestDelegate, SubsonicArtistAlbumsRequestDelegate, SubsonicAlbumSongsRequestDelegate, SubsonicArtistSongsRequestDelegate, SubsonicAlbumCoverRequestDelegate, SubsonicPingRequestDelegate, SubsonicResetSessionDelegate;
+@protocol SubsonicArtistSectionsRequestDelegate, SubsonicArtistAlbumsRequestDelegate, SubsonicAlbumSongsRequestDelegate, SubsonicArtistSongsRequestDelegate, SubsonicAlbumCoverRequestDelegate, SubsonicPingRequestDelegate, SubsonicResetSessionDelegate, SubsonicMusicFoldersRequestDelegate;
 
 @interface SubsonicRequestManager : NSObject
 
 @property (strong, nonatomic) NSString *server, *username, *password;
+@property (nonatomic) NSInteger musicFolder;
 
 + (id) sharedInstance;
 
@@ -33,6 +34,7 @@ typedef enum {
 - (void) getCoverArtForID:(NSString *) coverID delegate:(NSObject <SubsonicAlbumCoverRequestDelegate> *)delegate;
 - (void) pingServerWithDelegate:(NSObject <SubsonicPingRequestDelegate> *) delegate;
 - (void) resetSessionWithDelegate:(NSObject <SubsonicResetSessionDelegate> *)delegate;
+- (void) requestMusicFoldersWithDelegate:(NSObject <SubsonicMusicFoldersRequestDelegate> *)delegate;
 
 @end
 
@@ -81,5 +83,12 @@ typedef enum {
 @protocol SubsonicResetSessionDelegate <NSObject>
 
 - (void) resetSessionDidFinish;
+
+@end
+
+@protocol SubsonicMusicFoldersRequestDelegate <NSObject>
+
+- (void) musicFolderRequestDidFail;
+- (void) musicFolderRequestDidSucceedWithFolders:(NSArray *)folders;
 
 @end

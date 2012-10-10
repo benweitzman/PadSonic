@@ -7,7 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SubsonicRequestManager.h"
 
-@interface SelectMusicFolderViewController : UITableViewController
+@protocol SelectMusicFolderDelegate;
+
+@interface SelectMusicFolderViewController : UITableViewController <SubsonicMusicFoldersRequestDelegate>
+{
+    id<SelectMusicFolderDelegate> delegate;
+}
+
+@property (strong, nonatomic) NSArray *folders;
+@property (strong, nonatomic) id<SelectMusicFolderDelegate> delegate;
+
+@end
+
+@protocol SelectMusicFolderDelegate <NSObject>
+
+- (void) selectMusicFolderViewController:(SelectMusicFolderViewController*)smfvc didSelectFolderWithID:(NSInteger) folderID;
 
 @end

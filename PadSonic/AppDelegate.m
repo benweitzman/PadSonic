@@ -27,6 +27,8 @@
         [[SubsonicRequestManager sharedInstance] setUsername:username];
         [[SubsonicRequestManager sharedInstance] setPassword:password];
     }
+    [[SubsonicRequestManager sharedInstance] setMusicFolder:0];
+    
     return YES;
 }
 							

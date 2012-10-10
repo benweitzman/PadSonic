@@ -59,7 +59,7 @@
 {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    NSLog(@"%@",playlist);
+    //NSLog(@"%@",playlist);
     cell.textLabel.text = [NSString stringWithFormat:@"%@", playlist[indexPath.row][@"song"][@"title"]];
     if (playlist[indexPath.row][@"song"] == [delegate currentSong]) {
         [cell setAccessoryView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"glyphicons_184_volume_up.png"]]];

@@ -11,9 +11,18 @@
 
 #import "JSONKit.h"
 #import "SVProgressHUD.h"
+#import "SelectMusicFolderViewController.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface MasterViewController () {
     NSMutableArray *_objects;
+    CAGradientLayer *gradient;
+    UIPopoverController *popcoverController;
+    SEL showPopoverAction;
+    id showPopoverTarget;
+    id showPopoverSender;
+    MPMoviePlayerController *mplayer;
+
 }
 @end
 
@@ -33,38 +42,51 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.detailViewController.settingsDelegate = self;
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    CGRect frame = self.view.bounds;
-    gradient.frame = CGRectMake(frame.size.width-30, 0, 30, frame.size.height);
-    gradient.colors = [NSArray arrayWithObjects:
-                       (id)[[UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.8 ] CGColor]
-                       , (id)[[UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.8 ] CGColor]
-                       , (id)[[UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.8 ] CGColor]
-                       , (id)[[UIColor blackColor] CGColor]
-                       , (id)[[UIColor blackColor] CGColor], nil];
-    UIImageView *gradView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"grad.png"]];
-    gradView.frame = CGRectMake(frame.size.width-30, 0, 30, frame.size.height);
-    [self.view addSubview:gradView];
- 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addGradient)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
+    gradient = [CAGradientLayer layer];
+    
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+
+- (void)viewWillAppear:(BOOL)animated {
     [[SubsonicRequestManager sharedInstance] pingServerWithDelegate:self];
-    CGRect frame = self.view.bounds;
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.frame = CGRectMake(frame.size.width-10, self.navigationController.navigationBar.frame.size.height, 10, frame.size.height);
-    gradient.colors = [NSArray arrayWithObjects:
-                       (id)[[UIColor colorWithRed:0 green:0 blue:0 alpha:0] CGColor],
-                       (id)[[UIColor colorWithRed:0 green:0 blue:0 alpha:0.1] CGColor],
-                       (id)[[UIColor colorWithRed:0 green:0 blue:0 alpha:.3] CGColor], nil];
-    gradient.startPoint = CGPointMake(0, 0);
-    gradient.endPoint = CGPointMake(1,0);
-    [self.navigationController.view.layer addSublayer:gradient];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    /*NSString *hlsString = @"http://108.20.78.136:4040/rest/hls.m3u8?u=admin&p=Alvaro99!&f=json&v=1.7.0&c=helloworld&id=2f686f6d652f62656e2f446f776e6c6f6164732f70617373746865706f70636f726e2e6d652f412e436c6f636b776f726b2e4f72616e67652e313937312e373230702e426c755261792e4454532e783236342d4374726c48442e6d6b76";
+    //hlsString = @"http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8";
+    mplayer = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:hlsString]];
+    [mplayer.view setFrame: self.detailViewController.view.frame];  // player's frame must match parent's
+    NSLog(@"%@",NSStringFromCGRect(self.detailViewController.view.frame));
+    //[mplayer setControlStyle:MPMovieControlStyleFullscreen];
+    [mplayer setMovieSourceType:MPMovieSourceTypeStreaming];
+    //[mplayer setMovieSourceType:MPMovieSourceTypeUnknown];
+    [mplayer setFullscreen:YES];
+    // ...
+    [self.detailViewController.view addSubview:[mplayer view]];
+    [mplayer prepareToPlay];
+    [mplayer play];*/
+}
+
+- (void) addGradient {
+    if (!UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation])) {
+        CGRect frame = self.view.bounds;
+        gradient.frame = CGRectMake(frame.size.width-15, self.navigationController.navigationBar.frame.size.height, 15, frame.size.height);
+        gradient.colors = @[
+        (id)[[UIColor colorWithRed:0 green:0 blue:0 alpha:0] CGColor],
+        (id)[[UIColor colorWithRed:0 green:0 blue:0 alpha:0.02] CGColor],
+        (id)[[UIColor colorWithRed:0 green:0 blue:0 alpha:0.1] CGColor],
+        (id)[[UIColor colorWithRed:0 green:0 blue:0 alpha:.3] CGColor]];
+        gradient.startPoint = CGPointMake(0, 0);
+        gradient.endPoint = CGPointMake(1,0);
+        [self.navigationController.view.layer addSublayer:gradient];
+    } else {
+        [gradient removeFromSuperlayer];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -100,7 +122,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][section]] count];
+    NSObject *theSection = sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][section]];
+    if ([theSection isKindOfClass:[NSArray class]]) {
+        return [(NSArray*)theSection count];
+    } else {
+        return 1;
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -110,8 +137,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-
-    NSDictionary *artist = sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]][indexPath.row];
+    NSObject *section = sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]];
+    NSDictionary *artist;
+    if ([section isKindOfClass:[NSArray class]]) {
+        artist = sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]][indexPath.row];
+    } else {
+        artist = (NSDictionary*)section;
+    }
     cell.textLabel.text = [artist objectForKey:@"name"];
     return cell;
 }
@@ -151,8 +183,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        NSDictionary *artist = sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]][indexPath.row];
-        self.detailViewController.detailItem = artist;
+        NSArray *section = sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]];
+        NSDictionary *object = section[indexPath.row];
+        if (object[@"isVideo"]) {
+        } else {
+            self.detailViewController.detailItem = object;
+        }
     }
 }
 
@@ -163,6 +199,32 @@
         NSDate *object = _objects[indexPath.row];
         [[segue destinationViewController] setDetailItem:object];
     }
+    if([segue isKindOfClass:[UIStoryboardPopoverSegue class]]){
+        // Dismiss current popover, set new popover
+        showPopoverAction = [sender action];
+        showPopoverTarget = [sender target];
+        showPopoverSender = sender;
+        [sender setAction:@selector(closePopover:)];
+        [sender setTarget:self];
+        popcoverController = [(UIStoryboardPopoverSegue*)segue popoverController];
+        popcoverController.delegate = self;
+        [(SelectMusicFolderViewController*)[segue destinationViewController] setDelegate:self];
+    }
+}
+
+- (void) closePopover:(id)sender {
+    [showPopoverSender setAction:showPopoverAction];
+    [showPopoverSender setTarget:showPopoverTarget];
+    [popcoverController dismissPopoverAnimated:YES];
+}
+
+-(BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
+{
+    // A tap occurred outside of the popover.
+    // Restore the button actions before its dismissed.
+    [showPopoverSender setAction:showPopoverAction];
+    [showPopoverSender setTarget:showPopoverTarget];
+    return YES;
 }
 
 #pragma mark - SubsonicArtistSectionsRequestProtocol
@@ -196,4 +258,14 @@
     [[SubsonicRequestManager sharedInstance] pingServerWithDelegate:self];
 }
 
+
+#pragma mark - SelectMusicFolderDelegate 
+
+- (void) selectMusicFolderViewController:(SelectMusicFolderViewController *)smfvc didSelectFolderWithID:(NSInteger)folderID {
+    [showPopoverSender setAction:showPopoverAction];
+    [showPopoverSender setTarget:showPopoverTarget];
+    [popcoverController dismissPopoverAnimated:YES];
+    [[SubsonicRequestManager sharedInstance] getArtistSectionsForMusicFolder:folderID delegate:self];
+    
+}
 @end

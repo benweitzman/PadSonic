@@ -14,13 +14,21 @@
 #import "PlaylistViewController.h"
 #import "SVProgressHUD.h"
 
+typedef enum {
+    TimerDisplayTotal,
+    TimerDisplayCountdown
+} TimerDisplayMode;
+
 @interface DetailViewController ()
+{
+    TimerDisplayMode timerDisplayMode;
+}
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 - (void)configureView;
 @end
 
 @implementation DetailViewController
-@synthesize player, scrubber, albums, albumCollection, songTable, songs, currentSong, tableBackground, collectionBackground, playbackButton, playlist, playlistButton, playlistIndex, settingsDelegate, progress;
+@synthesize player, scrubber, albums, albumCollection, songTable, songs, currentSong, tableBackground, collectionBackground, playbackButton, playlist, playlistButton, playlistIndex, settingsDelegate, progress, as;
 
 #pragma mark - Managing the detail item
 
@@ -44,27 +52,30 @@
 
     if (self.detailItem) {
         self.title = self.detailItem[@"name"];
+        //NSLog(@"detail: %@",self.detailItem);
         [[SubsonicRequestManager sharedInstance] getAlbumsForArtistID:self.detailItem[@"id"] delegate:self];
         [[SubsonicRequestManager sharedInstance] getSongsForArtistID:self.detailItem[@"id"] delegate:self];
+        
     }
 }
 
 - (void)updateSlider {
-    [scrubber setValue:CMTimeGetSeconds(player.currentTime)/[currentSong[@"duration"] intValue]];
-    if ([[[player currentItem] loadedTimeRanges] count]) {
-        NSValue *value = [[player currentItem] loadedTimeRanges][0];
-        CMTimeRange range;
-        [value getValue:&range];
-        float duration = CMTimeGetSeconds(range.duration)+CMTimeGetSeconds(range.start);
-        [progress setProgress:duration/[currentSong[@"duration"] intValue] animated:YES];
+    [scrubber setValue:as.progress/[currentSong[@"duration"] intValue]];
+    int seconds = (int)floor(as.progress);
+    self.timerLeft.text = [NSString stringWithFormat:@"%d:%02d",seconds/60,seconds%60];
+    if (timerDisplayMode == TimerDisplayTotal) {
+        int duration = [currentSong[@"duration"] intValue];
+        self.timerRight.text = [NSString stringWithFormat:@"%d:%02d",duration/60,duration%60];
+    } else {
+        int timeLeft = [currentSong[@"duration"] intValue]-(int)floor(as.progress);
+        self.timerRight.text = [NSString stringWithFormat:@"-%d:%02d",timeLeft/60,timeLeft%60];
+
     }
 }
 
 - (IBAction) scrubSeek:(id)sender {
     UISlider *slider = (UISlider*)sender;
-    [player seekToTime:CMTimeMakeWithSeconds(slider.value*[currentSong[@"duration"] intValue], 600) completionHandler:^(BOOL finished){
-        NSLog(@"seeked");
-    }];
+    [as seekToTime:slider.value*[currentSong[@"duration"] intValue]];
 }
 
 - (void)viewDidLoad
@@ -98,50 +109,104 @@
     [playbackButton setTitle:@"" forState:UIControlStateNormal];
     [playbackButton setTitle:@"" forState:UIControlStateHighlighted];
     [playbackButton addTarget:self action:@selector(togglePlayback) forControlEvents:UIControlEventTouchUpInside];
-    [playlistButton setImage:[UIImage imageNamed:@"glyphicons_158_playlist.png"] forState:UIControlStateNormal];
+    [playlistButton setImage:[UIImage imageNamed:@"glyphicons_173_play.png"] forState:UIControlStateNormal];
     [playlistButton setImage:[UIImage imageNamed:@"glyphicons_158_playlist.png"] forState:UIControlStateHighlighted];
     albumCollection.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"grey.png"]];
     [scrubber setValue:0];
     [progress setProgress:0];
-    player = [[AVQueuePlayer alloc] init];
-    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
-    [player addObserver:self forKeyPath:@"status" options:0 context:nil];
     playlist = [[NSMutableArray alloc] init];
     playlistIndex = 0;
 
-    [scrubber setMinimumTrackImage:[UIImage imageNamed:@"transparent.png"] forState:UIControlStateNormal];
-    [scrubber setMaximumTrackImage:[UIImage imageNamed:@"transparent.png"] forState:UIControlStateNormal];
+    //[scrubber setMinimumTrackImage:[UIImage imageNamed:@"transparent.png"] forState:UIControlStateNormal];
+   // [scrubber setMaximumTrackImage:[UIImage imageNamed:@"transparent.png"] forState:UIControlStateNormal];
+    self.songTableOverlayMessage.layer.cornerRadius = 5;
+    self.songTableOverlayMessage.layer.masksToBounds = YES;
+    self.albumCollectionOverlayMessage.layer.cornerRadius = 5;
+    self.albumCollectionOverlayMessage.layer.masksToBounds = YES;
+    as = [[AudioStreamer alloc] init];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playbackStateChanged:)
+                                                 name:ASStatusChangedNotification
+                                               object:as];
+    [NSTimer scheduledTimerWithTimeInterval:0.1
+                                     target:self
+                                   selector:@selector(updateSlider)
+                                   userInfo:nil
+                                    repeats:YES];
+    self.timerRight.alpha = 0;
+    self.timerLeft.alpha = 0;
+    self.timerRight.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tapGesture =[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleTimerDisplayMode)];
+    tapGesture.numberOfTapsRequired = 1;
+    tapGesture.numberOfTouchesRequired = 1;
+    [self.timerRight addGestureRecognizer:tapGesture];
+    timerDisplayMode = TimerDisplayTotal;
+    self.songLabel.alpha = 0;
+    self.artistAlbumLabel.alpha = 0;
+    //self.timerRight.frame.origin.y += 100;
 }
 
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
-                        change:(NSDictionary *)change context:(void *)context {
-   if (object == player && [keyPath isEqualToString:@"status"]) {
-        if (player.status == AVPlayerStatusReadyToPlay) {
-            [player play];
-            [playbackButton setEnabled:YES];
-            [playbackButton setImage:[UIImage imageNamed:@"glyphicons_174_pause.png"] forState:UIControlStateNormal];
-            [playbackButton setImage:[UIImage imageNamed:@"glyphicons_174_pause.png"] forState:UIControlStateHighlighted];
-            //playButton.enabled = YES;
-        } else if (player.status == AVPlayerStatusFailed) {
-            NSLog(@"error");
-            // something went wrong. player.error should contain some information
-        } else if (player.status == AVPlayerStatusUnknown) {
-            NSLog(@"unknown");
-        }
+- (void) toggleTimerDisplayMode {
+    if (timerDisplayMode == TimerDisplayTotal) {
+        timerDisplayMode = TimerDisplayCountdown;
+    } else {
+        timerDisplayMode = TimerDisplayTotal;
     }
+    [self updateSlider];
+}
+
+-(void)playbackStateChanged:(NSNotification *)aNotification
+{
+	if ([as isWaiting])
+	{
+		//[self setButtonImageNamed:@"loadingbutton.png"];
+	}
+	else if ([as isPlaying])
+	{
+        NSLog(@"playing");
+        [playbackButton setImage:[UIImage imageNamed:@"glyphicons_174_pause.png"] forState:UIControlStateNormal];
+        [playbackButton setImage:[UIImage imageNamed:@"glyphicons_174_pause.png"] forState:UIControlStateHighlighted];
+        [playbackButton setEnabled:YES];
+        [UIView beginAnimations:@"" context:nil];
+        self.timerRight.alpha = 1;
+        self.timerLeft.alpha = 1;
+        self.artistAlbumLabel.alpha = 1;
+        self.songLabel.alpha = 1;
+        NSLog(@"%@",currentSong);
+        self.songLabel.text = [NSString stringWithFormat:@"%@",currentSong[@"title"]];
+        self.artistAlbumLabel.text = [NSString stringWithFormat:@"%@ - %@",currentSong[@"artist"],currentSong[@"album"]];
+        [UIView commitAnimations];
+		//[self setButtonImageNamed:@"stopbutton.png"];
+	}
+	else if ([as isIdle])
+	{
+        [UIView beginAnimations:@"" context:nil];
+        self.timerRight.alpha = 0;
+        self.timerLeft.alpha = 0;
+        self.artistAlbumLabel.alpha = 0;
+        self.songLabel.alpha = 0;
+        [UIView commitAnimations];
+        playlistIndex++;
+        [as stop];
+        if ([playlist count] != playlistIndex) {
+            as = [[AudioStreamer alloc] initWithURL:playlist[playlistIndex][@"streamURL"]];
+            currentSong = playlist[playlistIndex][@"song"];
+            [as start];
+            [[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(playbackStateChanged:)
+                                                         name:ASStatusChangedNotification
+                                                       object:as];
+        }
+	} else if ([as isPaused]) {
+        [playbackButton setImage:[UIImage imageNamed:@"glyphicons_173_play.png"] forState:UIControlStateNormal];
+        [playbackButton setImage:[UIImage imageNamed:@"glyphicons_173_play.png"] forState:UIControlStateHighlighted];
+    } 
 }
 
 - (void) togglePlayback {
-    if ([playbackButton imageForState:UIControlStateNormal] == [UIImage imageNamed:@"glyphicons_173_play.png"]) {
-        [player play];
-        [playbackButton setImage:[UIImage imageNamed:@"glyphicons_174_pause.png"] forState:UIControlStateNormal];
-        [playbackButton setImage:[UIImage imageNamed:@"glyphicons_174_pause.png"] forState:UIControlStateHighlighted];
-    } else {
-        [player pause];
-        [playbackButton setImage:[UIImage imageNamed:@"glyphicons_173_play.png"] forState:UIControlStateNormal];
-        [playbackButton setImage:[UIImage imageNamed:@"glyphicons_173_play.png"] forState:UIControlStateHighlighted];
-    }
+    if ([as isPlaying])
+        [as pause];
+    else [as start];
 }
 
 - (void)didReceiveMemoryWarning
@@ -169,6 +234,15 @@
 #pragma mark - Collection View
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if ([albums count]) {
+        [UIView beginAnimations:@"" context:nil];
+        self.albumCollectionOverlay.alpha = 0;
+        [UIView commitAnimations];
+    } else {
+        [UIView beginAnimations:@"" context:nil];
+        self.albumCollectionOverlay.alpha = 1;
+        [UIView commitAnimations];
+    }
     return [albums count];
 }
 
@@ -180,7 +254,8 @@
 {
     AlbumCell *cell = (AlbumCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"AlbumCell" forIndexPath:indexPath];
     NSDictionary *album = [albums objectAtIndex:indexPath.row];
-    cell.textLabel.text = album[@"title"];
+    //NSLog(@"%@",album);
+    cell.textLabel.text = album[@"title"]?album[@"title"]:album[@"name"];
     if (album[@"coverArt"]) {
         [[SubsonicRequestManager sharedInstance] getCoverArtForID:album[@"coverArt"] delegate:cell];
     } else {
@@ -200,7 +275,7 @@
 }
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [songTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] indexOfObject:albums[indexPath.item][@"title"]]] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [songTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] indexOfObject:albums[indexPath.item][@"title"]?albums[indexPath.item][@"title"]:albums[indexPath.item][@"name"]]] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     [collectionView cellForItemAtIndexPath:indexPath].highlighted = TRUE;
     UIImage *buttonImage = [[UIImage imageNamed:@"blueButton.png"]
                             resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
@@ -226,6 +301,15 @@
 #pragma mark - Table View
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+    if ([[songs allKeys] count]) {
+        [UIView beginAnimations:@"" context:nil];
+        self.songTableOverlay.alpha = 0;
+        [UIView commitAnimations];
+    } else {
+        [UIView beginAnimations:@"" context:nil];
+        self.songTableOverlay.alpha = 1;
+        [UIView commitAnimations];
+    }
     return [[songs allKeys] count];
 }
 
@@ -240,6 +324,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     NSDictionary *song = songs[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]][indexPath.row];
+    //NSLog(@"song: %@",song);
     cell.textLabel.text = [NSString stringWithFormat:@"%@", song[@"title"]];
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [cell addGestureRecognizer:longPress];
@@ -254,29 +339,19 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *song = songs[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]][indexPath.row];
-    NSURL *songURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://108.20.78.136:4040/rest/stream.view?f=json&u=admin&p=Alvaro99!&v=1.7.0&c=helloworld&id=%@&estimateContentLength=true",song[@"id"]]];
-    AVPlayerItem *newItem = [[AVPlayerItem alloc] initWithURL:songURL];
-    [playlist addObject:@{@"playerItem":newItem,@"song":song}];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(playerItemDidReachEnd)
-                                                 name:AVPlayerItemDidPlayToEndTimeNotification
-                                               object:newItem];
-    NSLog(@"%@",[player items]);
-    NSLog(@"%@",song);
-    if ([[player items] count] == 0) {
-        [[tableView cellForRowAtIndexPath:indexPath] setAccessoryView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"glyphicons_184_volume_up.png"]]];
-        [player insertItem:newItem afterItem:nil];
+    NSURL *songURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://108.20.78.136:4040/rest/stream.view?f=json&u=admin&p=Alvaro99!&v=1.7.0&c=helloworld&id=%@&estimateContentLength=true&format=mp3",song[@"id"]]];
+    [playlist addObject:@{@"streamURL":songURL,@"song":song}];
+    NSLog(@"%d, %d, %d",[playlist count], playlistIndex,[as isIdle]);
+    if ([playlist count] == (playlistIndex+1) && [as isIdle]) {
+        [as stop];
+        as = [[AudioStreamer alloc] initWithURL:songURL];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playbackStateChanged:)
+                                                     name:ASStatusChangedNotification
+                                                   object:as];
         currentSong = song;
-        NSLog(@"%@",[player items]);
-    } else {
-        [player insertItem:newItem afterItem:[[player items] lastObject]];
+        [as start];
     }
-    [player play];
-}
-
-- (void)playerItemDidReachEnd:(NSNotification *)notification {
-    NSLog(@"finished");
-    playlistIndex++;
 }
 
 - (void) handleLongPress:(id) sender {
@@ -306,11 +381,11 @@
 }
 
 - (void) playNow {
-    NSLog(@"hello");
+    //NSLog(@"hello");
 }
 
 - (void) addToPlaylist {
-    NSLog(@"wow");
+    //NSLog(@"wow");
 }
 
 #pragma mark - Segue Setups
@@ -332,23 +407,15 @@
 #pragma mark - PlaylistEditorProtocol
 
 - (void) playlistViewController:(PlaylistViewController *)playlistViewController didSelectSongAtIndex:(NSInteger)index {
-    if (index > playlistIndex) {
-        while ([player currentItem] != playlist[index][@"playerItem"]) {
-            [player advanceToNextItem];            
-        }
-        playlistIndex = index;
-        [player play];
-    } else if (index < playlistIndex) {
-        [player removeAllItems];
-        for (int i=index;i<[playlist count];i++) {
-            [player insertItem:playlist[i][@"playerItem"] afterItem:[[player items] lastObject]];
-        }
-        playlistIndex = index;
-        [player play];
-    } else {
-        [player seekToTime:CMTimeMakeWithSeconds(0, 600)];
-    }
+    playlistIndex = index;
     currentSong = playlist[index][@"song"];
+    [as stop];
+    as = [[AudioStreamer alloc] initWithURL:playlist[index][@"streamURL"]];
+    [as start];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playbackStateChanged:)
+                                                 name:ASStatusChangedNotification
+                                               object:as];
     [playlistViewController.navigationController dismissViewControllerAnimated:YES completion:nil];
     for (UITableViewCell *cell in [[songTable visibleCells] copy]) {
         [songTable reloadRowsAtIndexPaths:@[[songTable indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationNone];
@@ -378,7 +445,7 @@
     for (int i=playlistIndex+1;i<[playlist count];i++) {
         [player insertItem:playlist[i][@"playerItem"] afterItem:[[player items] lastObject]];
     }
-    NSLog(@"%d",playlistIndex);
+   // NSLog(@"%d",playlistIndex);
 }
 
 #pragma mark - SubsonicArtistAlbumsRequestProtocol

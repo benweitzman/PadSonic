@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "SubsonicRequestManager.h"
 #import "DetailViewController.h"
+#import "SelectMusicFolderViewController.h"
 
-@interface MasterViewController : UITableViewController <SubsonicArtistSectionsRequestDelegate, SubsonicPingRequestDelegate, SettingsUpdateProtocol>
+@interface MasterViewController : UITableViewController <SubsonicArtistSectionsRequestDelegate, SubsonicPingRequestDelegate, SettingsUpdateProtocol, UIPopoverControllerDelegate, SelectMusicFolderDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
