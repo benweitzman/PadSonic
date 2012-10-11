@@ -12,18 +12,23 @@
 #import "SubsonicRequestManager.h"
 #import "PlaylistViewController.h"
 #import "AudioStreamer.h"
+#import <MediaPlayer/MediaPlayer.h>
 
-@interface DetailViewController : UIViewController <UISplitViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, SubsonicArtistAlbumsRequestDelegate, SubsonicAlbumSongsRequestDelegate, SubsonicArtistSongsRequestDelegate, PlaylistEditorDelegate, SubsonicPingRequestDelegate, SettingsUpdateProtocol>
+@interface DetailViewController : UIViewController <UISplitViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, SubsonicArtistAlbumsRequestDelegate, SubsonicAlbumSongsRequestDelegate, SubsonicArtistSongsRequestDelegate, PlaylistEditorDelegate, SubsonicPingRequestDelegate, SettingsUpdateProtocol, SubsonicPlaylistRequestDelegate>
 
 @property (strong, nonatomic) id detailItem;
 @property (strong, nonatomic) AVQueuePlayer *player;
+@property (strong, nonatomic) MPMoviePlayerViewController *mplayer;
 @property (strong, nonatomic) AudioStreamer *as;
 @property (strong, nonatomic) NSArray *albums;
 @property (strong, nonatomic) NSDictionary *songs;
 @property (strong, nonatomic) NSDictionary *currentSong;
 @property (strong, nonatomic) NSMutableArray *playlist;
 @property (strong ,nonatomic) id<SettingsUpdateProtocol> settingsDelegate;
+@property (strong, nonatomic) NSMutableArray *playlists;
 @property (nonatomic) NSInteger playlistIndex;
+@property (nonatomic) NSInteger currentPlaylist;
+
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 @property (strong, nonatomic) IBOutlet UISlider *scrubber;
@@ -40,7 +45,13 @@
 @property (strong, nonatomic) IBOutlet UILabel *timerLeft;
 @property (strong, nonatomic) IBOutlet UILabel *songLabel;
 @property (strong, nonatomic) IBOutlet UILabel *artistAlbumLabel;
+@property (strong, nonatomic) IBOutlet UIButton *nextButton;
+@property (strong, nonatomic) IBOutlet UIButton *prevButton;
+- (IBAction)nextSong:(id)sender;
+- (IBAction)prevSong:(id)sender;
 
 - (IBAction) scrubSeek:(id)sender;
+
+- (void) updatePlaylists;
 
 @end

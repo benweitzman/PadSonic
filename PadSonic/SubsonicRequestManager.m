@@ -7,6 +7,7 @@
 //
 
 #import "SubsonicRequestManager.h"
+#import "GTMNSString+HTML.h"
 
 @interface SubsonicRequestManager()
 
@@ -35,7 +36,8 @@
     dispatch_async(queue, ^{
         NSString *urlString = [NSString stringWithFormat:@"http://%@/rest/getIndexes.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&musicFolderId=%d", server, username, password, musicFolderID];
         NSData *artistSectionsResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
-        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:artistSectionsResponse];
+        NSData *escapedData = [[[[NSString alloc] initWithData:artistSectionsResponse encoding:NSUTF8StringEncoding] gtm_stringByUnescapingFromHTML] dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:escapedData];
         NSMutableDictionary *sections = [[NSMutableDictionary alloc] init];
         for (NSDictionary *index in subsonicResponse[@"subsonic-response"][@"indexes"][@"index"]) {
             if ([index[@"artist"] isKindOfClass:[NSArray class]]) {
@@ -61,7 +63,8 @@
     dispatch_async(queue, ^{
         NSString *urlString = [NSString stringWithFormat:@"http://%@/rest/getMusicDirectory.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&id=%@", server, username, password, artistID];
         NSData *artistAlbumResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
-        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:artistAlbumResponse];
+        NSData *escapedData = [[[[NSString alloc] initWithData:artistAlbumResponse encoding:NSUTF8StringEncoding] gtm_stringByUnescapingFromHTML] dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:escapedData];
         NSObject *albumsObject = subsonicResponse[@"subsonic-response"][@"directory"][@"child"];
         if ([albumsObject isKindOfClass:[NSArray class]]) {
             if ([((NSArray*)albumsObject)[0][@"isDir"] intValue])
@@ -80,7 +83,9 @@
     dispatch_async(queue, ^{
         NSString *urlString = [NSString stringWithFormat:@"http://%@/rest/getMusicDirectory.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&id=%@", server, username, password, albumID];
         NSData *albumSongsResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
-        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:albumSongsResponse];
+        NSData *escapedData = [[[[NSString alloc] initWithData:albumSongsResponse encoding:NSUTF8StringEncoding] gtm_stringByUnescapingFromHTML] dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:escapedData];
         NSObject *albumSongs = subsonicResponse[@"subsonic-response"][@"directory"][@"child"];
         if ([albumSongs isKindOfClass:[NSArray class]]) {
             [delegate performSelectorOnMainThread:@selector(albumSongsRequestDidSucceedWithSongs:) withObject:albumSongs waitUntilDone:NO];
@@ -95,7 +100,9 @@
     dispatch_async(queue, ^{
         NSString *albumsURLString = [NSString stringWithFormat:@"http://%@/rest/getMusicDirectory.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&id=%@", server, username, password, artistID];
         NSData *artistAlbumsResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:albumsURLString]];
-        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:artistAlbumsResponse];
+        NSData *escapedData = [[[[NSString alloc] initWithData:artistAlbumsResponse encoding:NSUTF8StringEncoding] gtm_stringByUnescapingFromHTML] dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:escapedData];
         NSObject *albumsObject = subsonicResponse[@"subsonic-response"][@"directory"][@"child"];
         NSArray *albums;
         NSMutableDictionary *songs = [[NSMutableDictionary alloc] init];
@@ -123,7 +130,9 @@
         for (NSDictionary *album in albums) {
             NSString *songsURLString = [NSString stringWithFormat:@"http://%@/rest/getMusicDirectory.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&id=%@", server, username, password, album[@"id"]];
             NSData *albumSongsResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:songsURLString]];
-            NSDictionary *subsonicResponse2 = [[JSONDecoder decoder] objectWithData:albumSongsResponse];
+            NSData *escapedData2 = [[[[NSString alloc] initWithData:albumSongsResponse encoding:NSUTF8StringEncoding] gtm_stringByUnescapingFromHTML] dataUsingEncoding:NSUTF8StringEncoding];
+
+            NSDictionary *subsonicResponse2 = [[JSONDecoder decoder] objectWithData:escapedData2];
 
             NSString *sectionIndex = album[@"title"];
             if (!album[@"title"]) sectionIndex = album[@"name"];
@@ -219,7 +228,9 @@
         //NSLog(@"hello");
         NSString *folderURLString = [NSString stringWithFormat:@"http://%@/rest/getMusicFolders.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld",server,username,password];
         NSData *folderResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:folderURLString]];
-        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:folderResponse];
+        NSData *escapedData = [[[[NSString alloc] initWithData:folderResponse encoding:NSUTF8StringEncoding] gtm_stringByUnescapingFromHTML] dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSDictionary *subsonicResponse = [[JSONDecoder decoder] objectWithData:escapedData];
         //NSLog(@"%@",subsonicResponse);
         dispatch_async( dispatch_get_main_queue(), ^{
             [delegate musicFolderRequestDidSucceedWithFolders:subsonicResponse[@"subsonic-response"][@"musicFolders"][@"musicFolder"]];
@@ -227,5 +238,46 @@
     });
 }
 
+- (void) getPlaylistsWithDelegate:(NSObject<SubsonicPlaylistRequestDelegate> *)delegate {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        NSString *playlistsURLString = [NSString stringWithFormat:@"http://%@/rest/getPlaylists.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld",server,username,password];
+        NSData *playlistsResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:playlistsURLString]];
+        NSData *escapedData = [[[[NSString alloc] initWithData:playlistsResponse encoding:NSUTF8StringEncoding] gtm_stringByUnescapingFromHTML] dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *subsonicResponse = [[JSONDecoder decoder] mutableObjectWithData:escapedData];
+        NSObject *playlistsObjectContainer = subsonicResponse[@"subsonic-response"][@"playlists"];
+        NSArray *playlists;
+        if ([playlistsObjectContainer isKindOfClass:[NSString class]]) {
+            playlists = @[];
+        } else {
+            NSObject *playlistsObject = ((NSDictionary *)playlistsObjectContainer)[@"playlist"];
+            if (playlistsObject == nil) {
+                playlists = @[];
+            } else {
+                if ([playlistsObject isKindOfClass:[NSArray class]])
+                    playlists = (NSArray*)playlistsObject;
+                else
+                    playlists = @[playlistsObject];
+            }
+        }
+        NSMutableArray *playlistHolder = [[NSMutableArray alloc] init];
+        for (NSDictionary *playlist in playlists) {
+            NSString *playlistURLString = [NSString stringWithFormat:@"http://%@/rest/getPlaylist.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&id=%@",server,username,password,playlist[@"id"]];
+            NSData *playlistResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:playlistURLString]];
+            NSData *escapedData = [[[[NSString alloc] initWithData:playlistResponse encoding:NSUTF8StringEncoding] gtm_stringByUnescapingFromHTML] dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *subsonicResponse2 = [[JSONDecoder decoder] mutableObjectWithData:escapedData];
+            [playlistHolder addObject:subsonicResponse2[@"subsonic-response"][@"playlist"]];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [delegate playlistRequestDidSucceedwithPlaylists:playlistHolder];
+        });
+    });
+}
+
+- (NSURL *) getStreamURLForID:(NSString *)ID {
+    NSString *streamString = [NSString stringWithFormat:@"http://%@/rest/stream.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&id=%@",
+                              server,username,password,ID];
+    return [NSURL URLWithString:streamString];
+}
 
 @end

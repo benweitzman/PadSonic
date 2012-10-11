@@ -112,6 +112,15 @@
 		DA3C937A1623629100731F24 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9377162360F100731F24 /* SSKeychain.m */; };
 		DA3C937D162394C800731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3C937C162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m */; };
 		DA3C93821623B13A00731F24 /* transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3C93811623B13A00731F24 /* transparent.png */; };
+		DAA57B7B162607D600476DCC /* glyphicons_008_film.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B7A162607D600476DCC /* glyphicons_008_film.png */; };
+		DAA57B7E162632EF00476DCC /* glyphicons_008_film@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B7D162632EF00476DCC /* glyphicons_008_film@2x.png */; };
+		DAA57B801626330300476DCC /* glyphicons_158_playlist@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B7F1626330300476DCC /* glyphicons_158_playlist@2x.png */; };
+		DAA57B861626332900476DCC /* glyphicons_172_rewind@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B811626332900476DCC /* glyphicons_172_rewind@2x.png */; };
+		DAA57B871626332900476DCC /* glyphicons_173_play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B821626332900476DCC /* glyphicons_173_play@2x.png */; };
+		DAA57B881626332900476DCC /* glyphicons_174_pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B831626332900476DCC /* glyphicons_174_pause@2x.png */; };
+		DAA57B891626332900476DCC /* glyphicons_176_forward@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B841626332900476DCC /* glyphicons_176_forward@2x.png */; };
+		DAA57B8A1626332900476DCC /* glyphicons_184_volume_up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B851626332900476DCC /* glyphicons_184_volume_up@2x.png */; };
+		DAA57B8E16263B5100476DCC /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA57B8D16263B5100476DCC /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DAAE66771623D42F00376108 /* grad.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE66761623D42F00376108 /* grad.png */; };
 		DAAE66871624C45200376108 /* SelectMusicFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAE66861624C45200376108 /* SelectMusicFolderViewController.m */; };
 		DAB1E15116215D3C00830968 /* AudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB1E15016215D3C00830968 /* AudioStreamer.m */; };
@@ -289,6 +298,17 @@
 		DA3C937B162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutomaticDismissKeyboardNavigationControllerViewController.h; sourceTree = "<group>"; };
 		DA3C937C162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutomaticDismissKeyboardNavigationControllerViewController.m; sourceTree = "<group>"; };
 		DA3C93811623B13A00731F24 /* transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = transparent.png; sourceTree = "<group>"; };
+		DAA57B7A162607D600476DCC /* glyphicons_008_film.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_008_film.png; sourceTree = "<group>"; };
+		DAA57B7D162632EF00476DCC /* glyphicons_008_film@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_008_film@2x.png"; sourceTree = "<group>"; };
+		DAA57B7F1626330300476DCC /* glyphicons_158_playlist@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_158_playlist@2x.png"; sourceTree = "<group>"; };
+		DAA57B811626332900476DCC /* glyphicons_172_rewind@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_172_rewind@2x.png"; sourceTree = "<group>"; };
+		DAA57B821626332900476DCC /* glyphicons_173_play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_173_play@2x.png"; sourceTree = "<group>"; };
+		DAA57B831626332900476DCC /* glyphicons_174_pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_174_pause@2x.png"; sourceTree = "<group>"; };
+		DAA57B841626332900476DCC /* glyphicons_176_forward@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_176_forward@2x.png"; sourceTree = "<group>"; };
+		DAA57B851626332900476DCC /* glyphicons_184_volume_up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_184_volume_up@2x.png"; sourceTree = "<group>"; };
+		DAA57B8C16263B5100476DCC /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		DAA57B8D16263B5100476DCC /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
+		DAA57B8F16263C2800476DCC /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		DAAE66761623D42F00376108 /* grad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grad.png; sourceTree = "<group>"; };
 		DAAE66851624C45200376108 /* SelectMusicFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectMusicFolderViewController.h; sourceTree = "<group>"; };
 		DAAE66861624C45200376108 /* SelectMusicFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectMusicFolderViewController.m; sourceTree = "<group>"; };
@@ -333,6 +353,7 @@
 		DA053AF41621034400E829C1 /* External Sources */ = {
 			isa = PBXGroup;
 			children = (
+				DAA57B8B16263B5100476DCC /* GMTNSString+HTML */,
 				DA3C9379162360F900731F24 /* SSKeychain */,
 				DA3C9367162345AF00731F24 /* SVProgressHUD */,
 				DA3C934C1622439800731F24 /* ActionSheetPicker */,
@@ -526,12 +547,20 @@
 		DA3C92DA1621F79000731F24 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				DA2D963F162545B70099965C /* glyphicons_172_rewind.png */,
-				DA2D9640162545B70099965C /* glyphicons_176_forward.png */,
-				DA3C93651622989F00731F24 /* glyphicons_184_volume_up.png */,
+				DAA57B7A162607D600476DCC /* glyphicons_008_film.png */,
+				DAA57B7D162632EF00476DCC /* glyphicons_008_film@2x.png */,
 				DA3C936316225D9200731F24 /* glyphicons_158_playlist.png */,
+				DAA57B7F1626330300476DCC /* glyphicons_158_playlist@2x.png */,
+				DA2D963F162545B70099965C /* glyphicons_172_rewind.png */,
+				DAA57B811626332900476DCC /* glyphicons_172_rewind@2x.png */,
 				DA3C92D61621F78B00731F24 /* glyphicons_173_play.png */,
+				DAA57B821626332900476DCC /* glyphicons_173_play@2x.png */,
 				DA3C92D71621F78B00731F24 /* glyphicons_174_pause.png */,
+				DAA57B831626332900476DCC /* glyphicons_174_pause@2x.png */,
+				DA2D9640162545B70099965C /* glyphicons_176_forward.png */,
+				DAA57B841626332900476DCC /* glyphicons_176_forward@2x.png */,
+				DA3C93651622989F00731F24 /* glyphicons_184_volume_up.png */,
+				DAA57B851626332900476DCC /* glyphicons_184_volume_up@2x.png */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
@@ -659,6 +688,16 @@
 				DA3C9377162360F100731F24 /* SSKeychain.m */,
 			);
 			name = SSKeychain;
+			sourceTree = "<group>";
+		};
+		DAA57B8B16263B5100476DCC /* GMTNSString+HTML */ = {
+			isa = PBXGroup;
+			children = (
+				DAA57B8F16263C2800476DCC /* GTMDefines.h */,
+				DAA57B8C16263B5100476DCC /* GTMNSString+HTML.h */,
+				DAA57B8D16263B5100476DCC /* GTMNSString+HTML.m */,
+			);
+			path = "GMTNSString+HTML";
 			sourceTree = "<group>";
 		};
 		DAB1E15316215D4000830968 /* AudioStreamer */ = {
@@ -790,6 +829,14 @@
 				DAAE66771623D42F00376108 /* grad.png in Resources */,
 				DA2D9641162545B70099965C /* glyphicons_172_rewind.png in Resources */,
 				DA2D9642162545B70099965C /* glyphicons_176_forward.png in Resources */,
+				DAA57B7B162607D600476DCC /* glyphicons_008_film.png in Resources */,
+				DAA57B7E162632EF00476DCC /* glyphicons_008_film@2x.png in Resources */,
+				DAA57B801626330300476DCC /* glyphicons_158_playlist@2x.png in Resources */,
+				DAA57B861626332900476DCC /* glyphicons_172_rewind@2x.png in Resources */,
+				DAA57B871626332900476DCC /* glyphicons_173_play@2x.png in Resources */,
+				DAA57B881626332900476DCC /* glyphicons_174_pause@2x.png in Resources */,
+				DAA57B891626332900476DCC /* glyphicons_176_forward@2x.png in Resources */,
+				DAA57B8A1626332900476DCC /* glyphicons_184_volume_up@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -870,6 +917,7 @@
 				DA3C936C162345AF00731F24 /* SVProgressHUD.m in Sources */,
 				DA3C937D162394C800731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m in Sources */,
 				DAAE66871624C45200376108 /* SelectMusicFolderViewController.m in Sources */,
+				DAA57B8E16263B5100476DCC /* GTMNSString+HTML.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

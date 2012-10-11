@@ -18,7 +18,7 @@ typedef enum {
     ServerErrorUnknownError
 } SubsonicServerError;
 
-@protocol SubsonicArtistSectionsRequestDelegate, SubsonicArtistAlbumsRequestDelegate, SubsonicAlbumSongsRequestDelegate, SubsonicArtistSongsRequestDelegate, SubsonicAlbumCoverRequestDelegate, SubsonicPingRequestDelegate, SubsonicResetSessionDelegate, SubsonicMusicFoldersRequestDelegate;
+@protocol SubsonicArtistSectionsRequestDelegate, SubsonicArtistAlbumsRequestDelegate, SubsonicAlbumSongsRequestDelegate, SubsonicArtistSongsRequestDelegate, SubsonicAlbumCoverRequestDelegate, SubsonicPingRequestDelegate, SubsonicResetSessionDelegate, SubsonicMusicFoldersRequestDelegate, SubsonicPlaylistRequestDelegate;
 
 @interface SubsonicRequestManager : NSObject
 
@@ -35,6 +35,8 @@ typedef enum {
 - (void) pingServerWithDelegate:(NSObject <SubsonicPingRequestDelegate> *) delegate;
 - (void) resetSessionWithDelegate:(NSObject <SubsonicResetSessionDelegate> *)delegate;
 - (void) requestMusicFoldersWithDelegate:(NSObject <SubsonicMusicFoldersRequestDelegate> *)delegate;
+- (void) getPlaylistsWithDelegate:(NSObject <SubsonicPlaylistRequestDelegate> *) delegate;
+- (NSURL *) getStreamURLForID:(NSString *)ID;
 
 @end
 
@@ -90,5 +92,12 @@ typedef enum {
 
 - (void) musicFolderRequestDidFail;
 - (void) musicFolderRequestDidSucceedWithFolders:(NSArray *)folders;
+
+@end
+
+@protocol SubsonicPlaylistRequestDelegate <NSObject>
+
+- (void) playlistRequestDidFail;
+- (void) playlistRequestDidSucceedwithPlaylists:(NSMutableArray *)playlists;
 
 @end

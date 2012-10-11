@@ -144,6 +144,11 @@
     } else {
         artist = (NSDictionary*)section;
     }
+    if (artist[@"isVideo"]) {
+        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"glyphicons_008_film.png"]];
+    } else {
+        cell.accessoryView = nil;
+    }
     cell.textLabel.text = [artist objectForKey:@"name"];
     return cell;
 }
@@ -186,6 +191,13 @@
         NSArray *section = sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]];
         NSDictionary *object = section[indexPath.row];
         if (object[@"isVideo"]) {
+            NSString *hlsString = [NSString stringWithFormat:@"http://108.20.78.136:4040/rest/hls.m3u8?u=admin&p=Alvaro99!&f=json&v=1.7.0&c=helloworld&id=%@",object[@"id"]];
+            self.detailViewController.mplayer = [[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL URLWithString:hlsString]];
+            [self.detailViewController.mplayer.moviePlayer setMovieSourceType:MPMovieSourceTypeStreaming];
+            [self.detailViewController.mplayer.moviePlayer setFullscreen:NO];
+            [self.detailViewController.mplayer.moviePlayer prepareToPlay];
+            [self.detailViewController.mplayer.moviePlayer play];
+            [self presentMoviePlayerViewControllerAnimated:self.detailViewController.mplayer];
         } else {
             self.detailViewController.detailItem = object;
         }
@@ -250,6 +262,7 @@
 
 - (void) pingRequestDidSucceed {
     [[SubsonicRequestManager sharedInstance] getArtistSectionsForMusicFolder:0 delegate:self];
+    [self.detailViewController updatePlaylists];
 }
 
 #pragma mark - SettingsUpdateProtocol

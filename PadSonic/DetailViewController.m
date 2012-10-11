@@ -22,13 +22,16 @@ typedef enum {
 @interface DetailViewController ()
 {
     TimerDisplayMode timerDisplayMode;
+    NSDictionary *menuSong;
+    NSArray *menuAlbum;
+    BOOL songTableScrollingToAlbum;
 }
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 - (void)configureView;
 @end
 
 @implementation DetailViewController
-@synthesize player, scrubber, albums, albumCollection, songTable, songs, currentSong, tableBackground, collectionBackground, playbackButton, playlist, playlistButton, playlistIndex, settingsDelegate, progress, as;
+@synthesize player, scrubber, albums, albumCollection, songTable, songs, currentSong, tableBackground, collectionBackground, playbackButton, playlist, playlistButton, playlistIndex, settingsDelegate, progress, as, mplayer, playlists, currentPlaylist;
 
 #pragma mark - Managing the detail item
 
@@ -55,8 +58,11 @@ typedef enum {
         //NSLog(@"detail: %@",self.detailItem);
         [[SubsonicRequestManager sharedInstance] getAlbumsForArtistID:self.detailItem[@"id"] delegate:self];
         [[SubsonicRequestManager sharedInstance] getSongsForArtistID:self.detailItem[@"id"] delegate:self];
-        
     }
+}
+
+- (void) updatePlaylists {
+    [[SubsonicRequestManager sharedInstance] getPlaylistsWithDelegate:self];
 }
 
 - (void)updateSlider {
@@ -70,6 +76,55 @@ typedef enum {
         int timeLeft = [currentSong[@"duration"] intValue]-(int)floor(as.progress);
         self.timerRight.text = [NSString stringWithFormat:@"-%d:%02d",timeLeft/60,timeLeft%60];
 
+    }
+}
+
+- (IBAction)nextSong:(id)sender {
+    [UIView beginAnimations:@"" context:nil];
+    self.timerRight.alpha = 0;
+    self.timerLeft.alpha = 0;
+    self.artistAlbumLabel.alpha = 0;
+    self.songLabel.alpha = 0;
+    [UIView commitAnimations];
+    [scrubber setValue:0];
+    playlistIndex++;
+    [as stop];
+    if ([playlists[currentPlaylist][@"entry"] count] > playlistIndex) {
+        currentSong = playlists[currentPlaylist][@"entry"][playlistIndex];
+        as = [[AudioStreamer alloc] initWithURL:[[SubsonicRequestManager sharedInstance] getStreamURLForID:currentSong[@"id"]]];
+        [as start];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playbackStateChanged:)
+                                                     name:ASStatusChangedNotification
+                                                   object:as];
+    } else {
+        playlistIndex--;
+        [scrubber setValue:0];
+    }
+}
+
+- (IBAction)prevSong:(id)sender {
+    [UIView beginAnimations:@"" context:nil];
+    self.timerRight.alpha = 0;
+    self.timerLeft.alpha = 0;
+    self.artistAlbumLabel.alpha = 0;
+    self.songLabel.alpha = 0;
+    [UIView commitAnimations];
+    [scrubber setValue:0];
+    if ([as progress]/[currentSong[@"duration"] intValue] < 0.05 && playlistIndex>0)
+        playlistIndex--;
+    [as stop];
+    if (playlistIndex >= 0) {
+        currentSong = playlists[currentPlaylist][@"entry"][playlistIndex];
+        as = [[AudioStreamer alloc] initWithURL:[[SubsonicRequestManager sharedInstance] getStreamURLForID:currentSong[@"id"]]];
+        [as start];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playbackStateChanged:)
+                                                     name:ASStatusChangedNotification
+                                                   object:as];
+    } else {
+        playlistIndex++;
+        [scrubber setValue:0];
     }
 }
 
@@ -101,6 +156,10 @@ typedef enum {
     [playbackButton setBackgroundImage:highlightImage forState:UIControlStateHighlighted];
     [playlistButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
     [playlistButton setBackgroundImage:highlightImage forState:UIControlStateHighlighted];
+    [self.prevButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    [self.prevButton setBackgroundImage:highlightImage forState:UIControlStateHighlighted];
+    [self.nextButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    [self.nextButton setBackgroundImage:highlightImage forState:UIControlStateHighlighted];
     [playbackButton setEnabled:NO];
     [playbackButton setImage:[UIImage imageNamed:@"glyphicons_173_play.png"] forState:UIControlStateNormal];
     [playbackButton setImage:[UIImage imageNamed:@"glyphicons_173_play.png"] forState:UIControlStateDisabled];
@@ -109,14 +168,14 @@ typedef enum {
     [playbackButton setTitle:@"" forState:UIControlStateNormal];
     [playbackButton setTitle:@"" forState:UIControlStateHighlighted];
     [playbackButton addTarget:self action:@selector(togglePlayback) forControlEvents:UIControlEventTouchUpInside];
-    [playlistButton setImage:[UIImage imageNamed:@"glyphicons_173_play.png"] forState:UIControlStateNormal];
+    [playlistButton setImage:[UIImage imageNamed:@"glyphicons_158_playlist.png"] forState:UIControlStateNormal];
     [playlistButton setImage:[UIImage imageNamed:@"glyphicons_158_playlist.png"] forState:UIControlStateHighlighted];
     albumCollection.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"grey.png"]];
     [scrubber setValue:0];
     [progress setProgress:0];
     playlist = [[NSMutableArray alloc] init];
     playlistIndex = 0;
-
+    currentPlaylist = 0;
     //[scrubber setMinimumTrackImage:[UIImage imageNamed:@"transparent.png"] forState:UIControlStateNormal];
    // [scrubber setMaximumTrackImage:[UIImage imageNamed:@"transparent.png"] forState:UIControlStateNormal];
     self.songTableOverlayMessage.layer.cornerRadius = 5;
@@ -144,6 +203,14 @@ typedef enum {
     self.songLabel.alpha = 0;
     self.artistAlbumLabel.alpha = 0;
     //self.timerRight.frame.origin.y += 100;
+    songTableScrollingToAlbum = FALSE;
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    playlistButton.imageView.frame = playbackButton.imageView.frame;
+    self.prevButton.imageView.frame = playbackButton.imageView.frame;
+    self.nextButton.imageView.frame = playbackButton.imageView.frame;
+
 }
 
 - (void) toggleTimerDisplayMode {
@@ -180,23 +247,7 @@ typedef enum {
 	}
 	else if ([as isIdle])
 	{
-        [UIView beginAnimations:@"" context:nil];
-        self.timerRight.alpha = 0;
-        self.timerLeft.alpha = 0;
-        self.artistAlbumLabel.alpha = 0;
-        self.songLabel.alpha = 0;
-        [UIView commitAnimations];
-        playlistIndex++;
-        [as stop];
-        if ([playlist count] != playlistIndex) {
-            as = [[AudioStreamer alloc] initWithURL:playlist[playlistIndex][@"streamURL"]];
-            currentSong = playlist[playlistIndex][@"song"];
-            [as start];
-            [[NSNotificationCenter defaultCenter] addObserver:self
-                                                     selector:@selector(playbackStateChanged:)
-                                                         name:ASStatusChangedNotification
-                                                       object:as];
-        }
+        [self nextSong:nil];
 	} else if ([as isPaused]) {
         [playbackButton setImage:[UIImage imageNamed:@"glyphicons_173_play.png"] forState:UIControlStateNormal];
         [playbackButton setImage:[UIImage imageNamed:@"glyphicons_173_play.png"] forState:UIControlStateHighlighted];
@@ -271,24 +322,22 @@ typedef enum {
     } else {
         [[cell textLabel] setTextColor:[UIColor blackColor]];
     }
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongAlbumPress:)];
+    [cell addGestureRecognizer:longPress];
     return cell;
 }
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [songTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] indexOfObject:albums[indexPath.item][@"title"]?albums[indexPath.item][@"title"]:albums[indexPath.item][@"name"]]] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    [collectionView cellForItemAtIndexPath:indexPath].highlighted = TRUE;
-    UIImage *buttonImage = [[UIImage imageNamed:@"blueButton.png"]
-                            resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
-    UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:[collectionView cellForItemAtIndexPath:indexPath].frame];
-    backgroundView.image = buttonImage;
-    //[[collectionView cellForItemAtIndexPath:indexPath] setBackgroundView:backgroundView];
-    [[((AlbumCell*)[collectionView cellForItemAtIndexPath:indexPath]) textLabel] setTextColor:[UIColor whiteColor]];
+    songTableScrollingToAlbum = TRUE;
+    //[collectionView cellForItemAtIndexPath:indexPath].highlighted = TRUE;
+    //[[((AlbumCell*)[collectionView cellForItemAtIndexPath:indexPath]) textLabel] setTextColor:[UIColor whiteColor]];
 }
 
 - (void) collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [collectionView cellForItemAtIndexPath:indexPath].highlighted = FALSE;
+    //[collectionView cellForItemAtIndexPath:indexPath].highlighted = FALSE;
     //[[collectionView cellForItemAtIndexPath:indexPath] setBackgroundView:nil];
-     [[((AlbumCell*)[collectionView cellForItemAtIndexPath:indexPath]) textLabel] setTextColor:[UIColor blackColor]];
+     //[[((AlbumCell*)[collectionView cellForItemAtIndexPath:indexPath]) textLabel] setTextColor:[UIColor blackColor]];
 }
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
     AlbumCell *albumcell = (AlbumCell *)cell;
@@ -333,25 +382,55 @@ typedef enum {
     } else {
         [cell setAccessoryView:nil];
     }
+    if ([song[@"isVideo"] intValue]) {
+        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"glyphicons_008_film.png"]];
+    } else {
+        cell.accessoryView = nil;
+    }
     return cell;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *song = songs[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]][indexPath.row];
-    NSURL *songURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://108.20.78.136:4040/rest/stream.view?f=json&u=admin&p=Alvaro99!&v=1.7.0&c=helloworld&id=%@&estimateContentLength=true&format=mp3",song[@"id"]]];
-    [playlist addObject:@{@"streamURL":songURL,@"song":song}];
-    NSLog(@"%d, %d, %d",[playlist count], playlistIndex,[as isIdle]);
-    if ([playlist count] == (playlistIndex+1) && [as isIdle]) {
-        [as stop];
-        as = [[AudioStreamer alloc] initWithURL:songURL];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(playbackStateChanged:)
-                                                     name:ASStatusChangedNotification
-                                                   object:as];
-        currentSong = song;
-        [as start];
+    if ([song[@"isVideo"] intValue]) {
+        NSString *hlsString = [NSString stringWithFormat:@"http://108.20.78.136:4040/rest/hls.m3u8?u=admin&p=Alvaro99!&f=json&v=1.7.0&c=helloworld&id=%@",song[@"id"]];
+        //hlsString = @"http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8";
+        mplayer = [[MPMoviePlayerViewController alloc] initWithContentURL:[NSURL URLWithString:hlsString]];
+        //[mplayer.view setFrame: self.view.frame];  // player's frame must match parent's
+        NSLog(@"%@",NSStringFromCGRect(self.view.frame));
+        //[mplayer setControlStyle:MPMovieControlStyleFullscreen];
+        //[mplayer]
+        [mplayer.moviePlayer setMovieSourceType:MPMovieSourceTypeStreaming];
+        //[mplayer setMovieSourceType:MPMovieSourceTypeUnknown];
+        [mplayer.moviePlayer setFullscreen:NO];
+        // ...
+        //[self.view addSubview:[mplayer view]];
+        [mplayer.moviePlayer prepareToPlay];
+        [mplayer.moviePlayer play];
+        [self presentMoviePlayerViewControllerAnimated:mplayer];
+       // [self.navigationController pushViewController:mplayer animated:YES];
+        
+    } else {
+        [self addSong:song toPlaylist:currentPlaylist];
     }
+}
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView == songTable && !songTableScrollingToAlbum) {
+        NSUInteger sectionNumber = [[songTable indexPathForCell:[[songTable visibleCells] objectAtIndex:0]] section];
+        NSIndexPath *toSelect = [NSIndexPath indexPathForItem:sectionNumber inSection:0];
+        if (![albumCollection cellForItemAtIndexPath:toSelect].selected)
+            [albumCollection selectItemAtIndexPath:[NSIndexPath indexPathForItem:sectionNumber inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionCenteredHorizontally];
+    }
+}
+
+- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (scrollView == songTable) songTableScrollingToAlbum = FALSE;
+}
+
+- (void) scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (scrollView == songTable) songTableScrollingToAlbum = FALSE;
 }
 
 - (void) handleLongPress:(id) sender {
@@ -366,6 +445,26 @@ typedef enum {
         [self becomeFirstResponder];
         [menu setTargetRect:[sender view].frame inView:songTable];
         [menu setMenuVisible:YES animated:YES];
+        NSIndexPath *cellPath = [songTable indexPathForCell:(UITableViewCell*)[sender view]];
+        menuSong = songs[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][cellPath.section]][cellPath.row];
+    }
+}
+
+- (void) handleLongAlbumPress:(id) sender {
+    UILongPressGestureRecognizer *recognizer = sender;
+    if ([recognizer state] == UIGestureRecognizerStateBegan) {
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        menu.menuItems = @[
+        [[UIMenuItem alloc] initWithTitle:@"Play album" action:@selector(playAlbum)],
+        [[UIMenuItem alloc] initWithTitle:@"Add album to playlist" action:@selector(addAlbumToPlaylist)],
+        ];
+        //[self.view becomeFirstResponder];
+        [self becomeFirstResponder];
+        [menu setTargetRect:[sender view].frame inView:albumCollection];
+        [menu setMenuVisible:YES animated:YES];
+        NSIndexPath *cellPath = [albumCollection indexPathForCell:(AlbumCell*)[sender view]];
+        menuAlbum= songs[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][cellPath.row]];
+        NSLog(@"album press");
     }
 }
 
@@ -374,18 +473,66 @@ typedef enum {
 }
 
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    if (action == @selector(playNow) || action == @selector(addToPlaylist)) {
+    if (action == @selector(playNow) || action == @selector(addToPlaylist) || action == @selector(addAlbumToPlaylist) || action == @selector(playAlbum)) {
         return YES;
     }
     return NO;
 }
 
+- (NSInteger) playSong:(NSDictionary *) song {
+    NSURL *songURL = [[SubsonicRequestManager sharedInstance] getStreamURLForID:song[@"id"]];
+    [playlists addObject:@{@"entry":[[NSMutableArray alloc] initWithObjects:song,nil], @"name":@"On The Fly Playlist"}];
+    currentPlaylist = [playlists count]-1;
+    playlistIndex = 0;
+    [as stop];
+    as = [[AudioStreamer alloc] initWithURL:songURL];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playbackStateChanged:)
+                                                 name:ASStatusChangedNotification
+                                               object:as];
+    currentSong = song;
+    [as start];
+    return currentPlaylist;
+}
+
+- (void) addSong:(NSDictionary *)song toPlaylist:(NSInteger) thePlaylist{
+    NSURL *songURL = [[SubsonicRequestManager sharedInstance] getStreamURLForID:song[@"id"]];
+    [playlists[thePlaylist][@"entry"] addObject:song];
+    if ([playlists[thePlaylist] count] == (playlistIndex+1) && [as isIdle]) {
+        [as stop];
+        as = [[AudioStreamer alloc] initWithURL:songURL];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(playbackStateChanged:)
+                                                     name:ASStatusChangedNotification
+                                                   object:as];
+        currentSong = song;
+        [as start];
+    }
+}
+
+- (void) addAlbumToPlaylist {
+    for (int i=0;i<[menuAlbum count];i++) {
+        [self addSong:menuAlbum[i] toPlaylist:currentPlaylist];
+    }
+    menuAlbum = nil;
+}
+
+- (void) playAlbum {
+    NSInteger newPlaylist = [self playSong:menuAlbum[0]];
+    for (int i=1;i<[menuAlbum count];i++) {
+        [self addSong:menuAlbum[i] toPlaylist:newPlaylist];
+    }
+    menuAlbum = nil;
+}
+
 - (void) playNow {
-    //NSLog(@"hello");
+    [self playSong:menuSong];
+    menuSong = nil;
 }
 
 - (void) addToPlaylist {
-    //NSLog(@"wow");
+    [self addSong:menuSong toPlaylist:currentPlaylist];
+    menuSong = nil;
 }
 
 #pragma mark - Segue Setups
@@ -394,7 +541,9 @@ typedef enum {
     if ([[segue identifier] isEqualToString:@"PlaylistSegue"]) {
         UINavigationController *nc = [segue destinationViewController];
         PlaylistViewController *pvc = (PlaylistViewController*)nc.topViewController;
+        NSLog(@"%@",NSStringFromCGSize(nc.view.frame.size));
         [pvc setPlaylist:playlist];
+        [pvc setPlaylists:playlists];
         [pvc setDelegate:self];
     }
     if ([[segue identifier] isEqualToString:@"SettingsSegue"]) {
@@ -406,11 +555,12 @@ typedef enum {
 
 #pragma mark - PlaylistEditorProtocol
 
-- (void) playlistViewController:(PlaylistViewController *)playlistViewController didSelectSongAtIndex:(NSInteger)index {
+- (void) playlistViewController:(PlaylistViewController *)playlistViewController didSelectSongAtIndex:(NSInteger)index inPlaylist:(NSInteger)thePlaylistIndex{
     playlistIndex = index;
-    currentSong = playlist[index][@"song"];
+    currentPlaylist = thePlaylistIndex;
+    currentSong = playlists[currentPlaylist][@"entry"][playlistIndex];
     [as stop];
-    as = [[AudioStreamer alloc] initWithURL:playlist[index][@"streamURL"]];
+    as = [[AudioStreamer alloc] initWithURL:[[SubsonicRequestManager sharedInstance] getStreamURLForID:currentSong[@"id"]]];
     [as start];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(playbackStateChanged:)
@@ -422,30 +572,30 @@ typedef enum {
     }
 }
 
-- (void) playlistViewController:(PlaylistViewController *)playlistViewController didSelectMoveRowAt:(NSIndexPath *)fromIndexPath to:(NSIndexPath *)toIndexPath {
-    NSDictionary *item = [playlist objectAtIndex:fromIndexPath.row];
-    [playlist removeObjectAtIndex:fromIndexPath.row];
-    [playlist insertObject:item atIndex:toIndexPath.row];
-    if (fromIndexPath.row < toIndexPath.row) {
-        if (playlistIndex == fromIndexPath.row)
-            playlistIndex = toIndexPath.row;
-        else if (playlistIndex>fromIndexPath.row && playlistIndex<=toIndexPath.row) {
-            playlistIndex--;
+- (void) playlistViewController:(PlaylistViewController *)playlistViewController didSelectMoveRowAt:(NSIndexPath *)fromIndexPath to:(NSIndexPath *)toIndexPath inPlaylist:(NSInteger)thePlaylistIndex {
+    NSMutableDictionary *thePlaylist = playlists[thePlaylistIndex];
+    NSDictionary *item = thePlaylist[@"entry"][fromIndexPath.row];
+    [thePlaylist[@"entry"] removeObjectAtIndex:fromIndexPath.row];
+    [thePlaylist[@"entry"] insertObject:item atIndex:toIndexPath.row];
+    if (thePlaylistIndex == currentPlaylist) {
+        if (fromIndexPath.row < toIndexPath.row) {
+            if (playlistIndex == fromIndexPath.row)
+                playlistIndex = toIndexPath.row;
+            else if (playlistIndex>fromIndexPath.row && playlistIndex<=toIndexPath.row) {
+                playlistIndex--;
+            }
+        } else {
+            if (playlistIndex == fromIndexPath.row)
+                playlistIndex = toIndexPath.row;
+            else if (playlistIndex<fromIndexPath.row && playlistIndex>=toIndexPath.row) {
+                playlistIndex++;
+            }
         }
-    } else {
-        if (playlistIndex == fromIndexPath.row)
-            playlistIndex = toIndexPath.row;
-        else if (playlistIndex<fromIndexPath.row && playlistIndex>=toIndexPath.row) {
-            playlistIndex++;
-        }
     }
-    for (int i=1;i<[[player items] count];i++) {
-        [player removeItem:[player items][i]];
-    }
-    for (int i=playlistIndex+1;i<[playlist count];i++) {
-        [player insertItem:playlist[i][@"playerItem"] afterItem:[[player items] lastObject]];
-    }
-   // NSLog(@"%d",playlistIndex);
+}
+
+- (void) addNewPlaylist {
+    [playlists addObject:[@{@"entry":[[NSMutableArray alloc] init],@"name":@"On The Fly Playlist"} mutableCopy]];
 }
 
 #pragma mark - SubsonicArtistAlbumsRequestProtocol
@@ -457,6 +607,13 @@ typedef enum {
 
 - (void) artistAlbumsRequestDidSucceedWithAlbums:(NSArray *) artistAlbums {
     albums = artistAlbums;
+    albums = [albums sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSDictionary *album1 = (NSDictionary *)obj1;
+        NSDictionary *album2 = (NSDictionary *)obj2;
+        NSString *comp1 = album1[@"title"]?album1[@"title"]:album1[@"name"];
+        NSString *comp2 = album2[@"title"]?album2[@"title"]:album2[@"name"];
+        return [comp1 compare:comp2];
+    }];
     [albumCollection reloadData];
 }
 
@@ -480,6 +637,17 @@ typedef enum {
 
 - (void) pingRequestDidSucceed {
     
+}
+
+#pragma mark - SubsonicPlaylistRequestProtocol
+
+- (void) playlistRequestDidFail {
+    
+}
+
+- (void) playlistRequestDidSucceedwithPlaylists:(NSMutableArray *)thePlaylists {
+    playlists = thePlaylists;
+    [playlists insertObject:[@{@"entry":[[NSMutableArray alloc] init],@"name":@"On The Fly Playlist"} mutableCopy] atIndex:0];
 }
 
 #pragma mark - SettingsUpdateProtocol
