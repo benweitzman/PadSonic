@@ -44,36 +44,27 @@
 	// Do any additional setup after loading the view, typically from a nib.
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.detailViewController.settingsDelegate = self;
+    NSLog(@"detail view: %@",self.detailViewController);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addGradient)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
     gradient = [CAGradientLayer layer];
-    
+    [[SubsonicRequestManager sharedInstance] pingServerWithDelegate:self];
 }
 
 
 - (void)viewWillAppear:(BOOL)animated {
-    [[SubsonicRequestManager sharedInstance] pingServerWithDelegate:self];
+    if (isiPhone()) {
+        [[SubsonicRequestManager sharedInstance] getArtistSectionsForMusicFolder:[[SubsonicRequestManager sharedInstance] musicFolder] delegate:self];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated {
-    /*NSString *hlsString = @"http://108.20.78.136:4040/rest/hls.m3u8?u=admin&p=Alvaro99!&f=json&v=1.7.0&c=helloworld&id=2f686f6d652f62656e2f446f776e6c6f6164732f70617373746865706f70636f726e2e6d652f412e436c6f636b776f726b2e4f72616e67652e313937312e373230702e426c755261792e4454532e783236342d4374726c48442e6d6b76";
-    //hlsString = @"http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8";
-    mplayer = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:hlsString]];
-    [mplayer.view setFrame: self.detailViewController.view.frame];  // player's frame must match parent's
-    NSLog(@"%@",NSStringFromCGRect(self.detailViewController.view.frame));
-    //[mplayer setControlStyle:MPMovieControlStyleFullscreen];
-    [mplayer setMovieSourceType:MPMovieSourceTypeStreaming];
-    //[mplayer setMovieSourceType:MPMovieSourceTypeUnknown];
-    [mplayer setFullscreen:YES];
-    // ...
-    [self.detailViewController.view addSubview:[mplayer view]];
-    [mplayer prepareToPlay];
-    [mplayer play];*/
+   
 }
 
 - (void) addGradient {
-    if (!UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation])) {
+    if (!UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation]) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         CGRect frame = self.view.bounds;
         gradient.frame = CGRectMake(frame.size.width-15, self.navigationController.navigationBar.frame.size.height, 15, frame.size.height);
         gradient.colors = @[
@@ -206,11 +197,13 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
+    if ([[segue identifier] isEqualToString:@"showDetailPhone"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = _objects[indexPath.row];
+        NSDate *object = sections[[[sections allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][indexPath.section]][indexPath.row];
         [[segue destinationViewController] setDetailItem:object];
+        NSLog(@"%@",[segue destinationViewController]);
     }
+    //if ([[segue identifier isEq]])
     if([segue isKindOfClass:[UIStoryboardPopoverSegue class]]){
         // Dismiss current popover, set new popover
         showPopoverAction = [sender action];
@@ -261,7 +254,7 @@
 }
 
 - (void) pingRequestDidSucceed {
-    [[SubsonicRequestManager sharedInstance] getArtistSectionsForMusicFolder:0 delegate:self];
+    [[SubsonicRequestManager sharedInstance] getArtistSectionsForMusicFolder:[[SubsonicRequestManager sharedInstance] musicFolder] delegate:self];
     [self.detailViewController updatePlaylists];
 }
 

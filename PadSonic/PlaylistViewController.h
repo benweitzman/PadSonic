@@ -10,7 +10,7 @@
 
 @protocol PlaylistEditorDelegate;
 
-@interface PlaylistViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface PlaylistViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIScrollViewDelegate>
 {
     id<PlaylistEditorDelegate> delegate;
 }
@@ -21,8 +21,10 @@
 @property (strong, nonatomic) NSMutableArray *tableViews;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UIPageControl *pageControl;
 - (IBAction)close:(id)sender;
 - (IBAction)toggleEditing:(id)sender;
+- (IBAction)changePage:(id)sender;
 
 @end
 
@@ -31,8 +33,10 @@
 - (void) playlistViewController:(PlaylistViewController *)playlistViewController didSelectSongAtIndex:(NSInteger)songIndex inPlaylist:(NSInteger)playlistIndex;
 
 - (void) playlistViewController:(PlaylistViewController *)playlistViewController didSelectMoveRowAt:(NSIndexPath *) fromIndexPath to:(NSIndexPath *) toIndexPath inPlaylist:(NSInteger)playlistIndex;
+- (void) playlistViewController:(PlaylistViewController *)playlistViewController didChangeNameOfPlaylist:(NSInteger) playlistIndex toName:(NSString *) name;
 
-- (void) addNewPlaylist;
+- (void) addNewPlaylistWithName:(NSString *)name;
+- (void) syncPlaylists;
 
 - (NSInteger) playlistIndex;
 - (void) setPlaylistIndex:(NSInteger)index;

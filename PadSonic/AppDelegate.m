@@ -8,11 +8,16 @@
 
 #import "AppDelegate.h"
 #import "SSKeychain.h"
+#import <Crashlytics/Crashlytics.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [Crashlytics startWithAPIKey:@"e15182a6b718cd3a2034de1f40245dbf89968515"];
+    //[self checkLaunchOrientation:self];
+    
+
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
@@ -28,10 +33,11 @@
         [[SubsonicRequestManager sharedInstance] setPassword:password];
     }
     [[SubsonicRequestManager sharedInstance] setMusicFolder:0];
-    
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    [self becomeFirstResponder];
     return YES;
 }
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

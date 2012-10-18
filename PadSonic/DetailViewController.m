@@ -13,6 +13,9 @@
 #import "AlbumCell.h"
 #import "PlaylistViewController.h"
 #import "SVProgressHUD.h"
+#import "PlaylistSelectViewController.h"
+#import "A2StoryboardSegueContext.h"
+#import "ConflictResolutionViewController.h"
 
 typedef enum {
     TimerDisplayTotal,
@@ -24,14 +27,17 @@ typedef enum {
     TimerDisplayMode timerDisplayMode;
     NSDictionary *menuSong;
     NSArray *menuAlbum;
+    CGRect playlistSelectFrame;
     BOOL songTableScrollingToAlbum;
+    UIPopoverController *playlistSelectPopover;
 }
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 - (void)configureView;
+- (void)writePlaylistsToFile;
 @end
 
 @implementation DetailViewController
-@synthesize player, scrubber, albums, albumCollection, songTable, songs, currentSong, tableBackground, collectionBackground, playbackButton, playlist, playlistButton, playlistIndex, settingsDelegate, progress, as, mplayer, playlists, currentPlaylist;
+@synthesize player, scrubber, albums, albumCollection, songTable, songs, currentSong, tableBackground, collectionBackground, playbackButton, playlist, playlistButton, playlistIndex, settingsDelegate, progress, as, mplayer, playlists, currentPlaylist, searchBar;
 
 #pragma mark - Managing the detail item
 
@@ -62,6 +68,7 @@ typedef enum {
 }
 
 - (void) updatePlaylists {
+    [SVProgressHUD showWithStatus:@"Updating Playlists"];
     [[SubsonicRequestManager sharedInstance] getPlaylistsWithDelegate:self];
 }
 
@@ -204,6 +211,11 @@ typedef enum {
     self.artistAlbumLabel.alpha = 0;
     //self.timerRight.frame.origin.y += 100;
     songTableScrollingToAlbum = FALSE;
+    if (isiPad()) {
+        searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 120, 44)];
+        searchBar.delegate = self;
+        self.navigationItem.leftBarButtonItems = @[[[UIBarButtonItem alloc] initWithCustomView:searchBar]];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -294,6 +306,7 @@ typedef enum {
         self.albumCollectionOverlay.alpha = 1;
         [UIView commitAnimations];
     }
+    NSLog(@"%@",albums);
     return [albums count];
 }
 
@@ -377,15 +390,42 @@ typedef enum {
     cell.textLabel.text = [NSString stringWithFormat:@"%@", song[@"title"]];
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [cell addGestureRecognizer:longPress];
-    if (song == currentSong) {
-        [cell setAccessoryView:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"glyphicons_184_volume_up.png"]]];
+    
+    int seconds = [song[@"duration"] intValue];
+    if (isiPad()) {
+        UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 43)];
+        timeLabel.text = [NSString stringWithFormat:@"%d:%02d",seconds/60,seconds%60];
+        timeLabel.textAlignment = NSTextAlignmentRight;
+        UIView *accessoryView;
+        if (song == currentSong) {
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"glyphicons_184_volume_up.png"]];
+            timeLabel.frame = CGRectMake(0, 0, 80, 43);
+            imageView.frame = CGRectMake(0,0,43,43);
+            imageView.contentMode = UIViewContentModeCenter;
+            accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 43)];
+            [accessoryView addSubview:timeLabel];
+            [accessoryView addSubview:imageView];
+        }
+        else if ([song[@"isVideo"] intValue]) {
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"glyphicons_008_film.png"]];
+            timeLabel.frame = CGRectMake(0, 0, 80, 43);
+            imageView.frame = CGRectMake(0,0,43,43);
+            imageView.contentMode = UIViewContentModeCenter;
+            accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 43)];
+            [accessoryView addSubview:timeLabel];
+            [accessoryView addSubview:imageView];
+        } else {
+            accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0,0,140,43)];
+            [accessoryView addSubview:timeLabel];
+        }
+        [cell setAccessoryView:accessoryView];
     } else {
-        [cell setAccessoryView:nil];
-    }
-    if ([song[@"isVideo"] intValue]) {
-        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"glyphicons_008_film.png"]];
-    } else {
-        cell.accessoryView = nil;
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%d:%02d",seconds/60,seconds%60];
+        if (song == currentSong) {
+            [cell.imageView setImage:[UIImage imageNamed:@"glyphicons_173_play.png"]];
+        } else {
+            [cell.imageView setImage:nil];
+        }
     }
     return cell;
 }
@@ -439,7 +479,8 @@ typedef enum {
         UIMenuController *menu = [UIMenuController sharedMenuController];
         menu.menuItems = @[
         [[UIMenuItem alloc] initWithTitle:@"Play now" action:@selector(playNow)],
-        [[UIMenuItem alloc] initWithTitle:@"Add to playlist" action:@selector(addToPlaylist)],
+        [[UIMenuItem alloc] initWithTitle:@"Add to current playlist" action:@selector(addToPlaylist)],
+        [[UIMenuItem alloc] initWithTitle:@"Add to other playlist" action:@selector(addToOtherPlaylist)],
         ];
         //[self.view becomeFirstResponder];
         [self becomeFirstResponder];
@@ -447,6 +488,10 @@ typedef enum {
         [menu setMenuVisible:YES animated:YES];
         NSIndexPath *cellPath = [songTable indexPathForCell:(UITableViewCell*)[sender view]];
         menuSong = songs[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][cellPath.section]][cellPath.row];
+        playlistSelectFrame = [sender view].frame;
+        playlistSelectFrame.origin.y -= ((UITableView*)[[sender view] superview]).contentOffset.y;
+        playlistSelectFrame.origin.x += [[sender view] superview].frame.origin.x;
+        playlistSelectFrame.origin.y += [[sender view] superview].frame.origin.y;
     }
 }
 
@@ -456,15 +501,18 @@ typedef enum {
         UIMenuController *menu = [UIMenuController sharedMenuController];
         menu.menuItems = @[
         [[UIMenuItem alloc] initWithTitle:@"Play album" action:@selector(playAlbum)],
-        [[UIMenuItem alloc] initWithTitle:@"Add album to playlist" action:@selector(addAlbumToPlaylist)],
+        [[UIMenuItem alloc] initWithTitle:@"Add album to current playlist" action:@selector(addAlbumToPlaylist)],
         ];
         //[self.view becomeFirstResponder];
         [self becomeFirstResponder];
         [menu setTargetRect:[sender view].frame inView:albumCollection];
         [menu setMenuVisible:YES animated:YES];
         NSIndexPath *cellPath = [albumCollection indexPathForCell:(AlbumCell*)[sender view]];
-        menuAlbum= songs[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][cellPath.row]];
-        NSLog(@"album press");
+        menuAlbum = songs[[[songs allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)][cellPath.row]];
+        playlistSelectFrame = [sender view].frame;
+        playlistSelectFrame.origin.x -= ((UICollectionView*)[[sender view] superview]).contentOffset.x;
+        playlistSelectFrame.origin.x += [[sender view] superview].frame.origin.x;
+        playlistSelectFrame.origin.y += [[sender view] superview].frame.origin.y;
     }
 }
 
@@ -473,7 +521,7 @@ typedef enum {
 }
 
 -(BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    if (action == @selector(playNow) || action == @selector(addToPlaylist) || action == @selector(addAlbumToPlaylist) || action == @selector(playAlbum)) {
+    if (action == @selector(playNow) || action == @selector(addToPlaylist) || action == @selector(addAlbumToPlaylist) || action == @selector(playAlbum) || action == @selector(addToOtherPlaylist)) {
         return YES;
     }
     return NO;
@@ -481,8 +529,8 @@ typedef enum {
 
 - (NSInteger) playSong:(NSDictionary *) song {
     NSURL *songURL = [[SubsonicRequestManager sharedInstance] getStreamURLForID:song[@"id"]];
-    [playlists addObject:@{@"entry":[[NSMutableArray alloc] initWithObjects:song,nil], @"name":@"On The Fly Playlist"}];
-    currentPlaylist = [playlists count]-1;
+    [playlists replaceObjectAtIndex:0 withObject:[@{@"entry":[[NSMutableArray alloc] initWithObjects:song,nil], @"name":@"On The Fly Playlist", @"temporary":@YES} mutableCopy]];
+    currentPlaylist = 0;
     playlistIndex = 0;
     [as stop];
     as = [[AudioStreamer alloc] initWithURL:songURL];
@@ -492,13 +540,17 @@ typedef enum {
                                                object:as];
     currentSong = song;
     [as start];
+    [self writePlaylistsToFile];
     return currentPlaylist;
 }
 
 - (void) addSong:(NSDictionary *)song toPlaylist:(NSInteger) thePlaylist{
     NSURL *songURL = [[SubsonicRequestManager sharedInstance] getStreamURLForID:song[@"id"]];
+    NSLog(@"%@",playlists[thePlaylist]);
     [playlists[thePlaylist][@"entry"] addObject:song];
-    if ([playlists[thePlaylist] count] == (playlistIndex+1) && [as isIdle]) {
+    NSLog(@"%@",NSStringFromClass([playlists[thePlaylist] class]));
+    playlists[thePlaylist][@"canBeReplaced"] = @NO;
+    if ([playlists[thePlaylist][@"entry"] count] == (playlistIndex+1) && [as isIdle]) {
         [as stop];
         as = [[AudioStreamer alloc] initWithURL:songURL];
         [[NSNotificationCenter defaultCenter] addObserver:self
@@ -508,6 +560,7 @@ typedef enum {
         currentSong = song;
         [as start];
     }
+    [self writePlaylistsToFile];
 }
 
 - (void) addAlbumToPlaylist {
@@ -517,8 +570,30 @@ typedef enum {
     menuAlbum = nil;
 }
 
+- (void) addToOtherPlaylist {
+    PlaylistSelectViewController *psvc = [[PlaylistSelectViewController alloc] init];
+    psvc.playlists = playlists;
+    psvc.delegate = self;
+    psvc.title = @"Select a playlist";
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:psvc];
+    playlistSelectPopover = [[UIPopoverController alloc] initWithContentViewController:navController];
+
+    [playlistSelectPopover setPopoverContentSize:CGSizeMake(360, 220)];
+    [playlistSelectPopover presentPopoverFromRect:playlistSelectFrame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionDown|UIPopoverArrowDirectionUp animated:YES];
+}
+
+- (void) playlistSelectViewController:(PlaylistSelectViewController *)playlistSelectViewController didSelectPlaylistWithIndex:(NSInteger)thePlaylistIndex {
+    NSLog(@"hello");
+    if (menuSong != nil)
+        [self addSong:menuSong toPlaylist:thePlaylistIndex];
+    [playlistSelectPopover dismissPopoverAnimated:YES];
+    menuSong = nil;
+    menuAlbum = nil;
+}
+
 - (void) playAlbum {
     NSInteger newPlaylist = [self playSong:menuAlbum[0]];
+    NSLog(@"menuAlbum: %@, newPlaylist:%d",menuAlbum,newPlaylist);
     for (int i=1;i<[menuAlbum count];i++) {
         [self addSong:menuAlbum[i] toPlaylist:newPlaylist];
     }
@@ -551,6 +626,13 @@ typedef enum {
         SettingsViewController *svc = (SettingsViewController*)nc.topViewController;
         svc.delegate = self;
     }
+    if ([[segue identifier] isEqualToString:@"ConflictResolutionSegue"]) {
+        UINavigationController *nc = [segue destinationViewController];
+        ConflictResolutionViewController *crvc = (ConflictResolutionViewController*)nc.topViewController;
+        crvc.delegate = self;
+        crvc.conflicts = [segue context];
+        NSLog(@"%@",[segue context]);
+    }
 }
 
 #pragma mark - PlaylistEditorProtocol
@@ -577,6 +659,7 @@ typedef enum {
     NSDictionary *item = thePlaylist[@"entry"][fromIndexPath.row];
     [thePlaylist[@"entry"] removeObjectAtIndex:fromIndexPath.row];
     [thePlaylist[@"entry"] insertObject:item atIndex:toIndexPath.row];
+    thePlaylist[@"canBeReplaced"] = @NO;
     if (thePlaylistIndex == currentPlaylist) {
         if (fromIndexPath.row < toIndexPath.row) {
             if (playlistIndex == fromIndexPath.row)
@@ -592,10 +675,53 @@ typedef enum {
             }
         }
     }
+    [self writePlaylistsToFile];
 }
 
-- (void) addNewPlaylist {
-    [playlists addObject:[@{@"entry":[[NSMutableArray alloc] init],@"name":@"On The Fly Playlist"} mutableCopy]];
+- (void) playlistViewController:(PlaylistViewController *)playlistViewController didChangeNameOfPlaylist:(NSInteger)thePlaylistIndex toName:(NSString *)name {
+    playlists[thePlaylistIndex][@"name"] = name;
+    BOOL shouldAddNewTemporary = NO;
+    if ([playlists[thePlaylistIndex][@"temporary"] isEqualToNumber:@YES]) {
+        playlists[thePlaylistIndex][@"temporary"] = @NO;
+        playlists[thePlaylistIndex][@"canBeReplaced"] = @NO;
+        shouldAddNewTemporary = YES;
+    }
+    [playlists sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1[@"name"] compare:obj2[@"name"] options:NSCaseInsensitiveSearch|NSNumericSearch];
+    }];
+    if (shouldAddNewTemporary) {
+        NSMutableDictionary *tempPlaylist = [@{@"entry":[[NSMutableArray alloc] init],
+                                             @"name":@"On The Fly Playlist",
+                                             @"temporary":@YES} mutableCopy];
+        [playlists insertObject:tempPlaylist atIndex:0];
+    }
+    [self writePlaylistsToFile];
+}
+
+- (void) addNewPlaylistWithName:(NSString *)name {
+    [playlists addObject:[@{@"entry":[[NSMutableArray alloc] init],@"name":name,@"temporary":@NO} mutableCopy]];
+    [self writePlaylistsToFile];
+}
+
+- (void) syncPlaylists {
+    [SVProgressHUD showWithStatus:@"Syncing Playlists" maskType:SVProgressHUDMaskTypeBlack];
+    [[SubsonicRequestManager sharedInstance] syncPlaylists:
+     [playlists objectsAtIndexes:
+      [playlists indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL* stop) {
+         return [obj[@"temporary"] isEqualToNumber:@NO];
+     }]] withDelegate:self];
+}
+
+- (void) writePlaylistsToFile {
+    NSString *cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+    NSString *playlistFile = [cacheDirectory stringByAppendingPathComponent:@"playlists.plist"];
+    NSString *tempPlaylistFile = [cacheDirectory stringByAppendingPathComponent:@"tempPlaylist.plist"];
+    [[playlists objectsAtIndexes:[playlists indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL* stop) {
+        return [obj[@"temporary"] isEqualToNumber:@NO];
+    }]] writeToFile:playlistFile atomically:YES];
+    [(NSMutableDictionary *)[playlists objectAtIndex:[playlists indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL* stop) {
+        return [obj[@"temporary"] isEqualToNumber:@YES];
+    }]] writeToFile:tempPlaylistFile atomically:YES];
 }
 
 #pragma mark - SubsonicArtistAlbumsRequestProtocol
@@ -606,6 +732,7 @@ typedef enum {
 }
 
 - (void) artistAlbumsRequestDidSucceedWithAlbums:(NSArray *) artistAlbums {
+    NSLog(@"%@",artistAlbums);
     albums = artistAlbums;
     albums = [albums sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         NSDictionary *album1 = (NSDictionary *)obj1;
@@ -646,8 +773,88 @@ typedef enum {
 }
 
 - (void) playlistRequestDidSucceedwithPlaylists:(NSMutableArray *)thePlaylists {
-    playlists = thePlaylists;
-    [playlists insertObject:[@{@"entry":[[NSMutableArray alloc] init],@"name":@"On The Fly Playlist"} mutableCopy] atIndex:0];
+    //playlists = thePlaylists;
+    NSString *cacheDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+
+    NSString *playlistFile = [cacheDirectory stringByAppendingPathComponent:@"playlists.plist"];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:playlistFile]) {
+        NSMutableArray *playlistsFromFile = [[NSMutableArray alloc] initWithContentsOfFile:playlistFile];
+        playlists = playlistsFromFile;
+    } else {
+        playlists = [@[] mutableCopy];
+    }
+    [playlists enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop) {
+        obj[@"temporary"] = @NO;
+    }];
+    NSMutableArray *conflicts = [[NSMutableArray alloc] init];
+    for (NSMutableDictionary *serverPlaylist in thePlaylists) {
+        NSUInteger conflictIdx = [playlists indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            NSMutableDictionary *pl = obj;
+            if (pl[@"id"] == serverPlaylist[@"id"]) {
+                return YES;
+            }
+            if ([pl[@"name"] isEqualToString:serverPlaylist[@"name"]]) {
+                return YES;
+            }
+            return NO;
+        }];
+        serverPlaylist[@"canBeReplaced"] = @YES;
+        serverPlaylist[@"temporary"] = @NO;
+        if (conflictIdx == NSNotFound) {
+            [playlists addObject:serverPlaylist];
+        } else {
+            NSMutableDictionary *conflictPlaylist = playlists[conflictIdx];
+            BOOL shouldReplace = FALSE;
+            if ([conflictPlaylist[@"canBeReplaced"] isEqualToNumber:@NO]) {
+                shouldReplace = FALSE;
+            } else {
+                if ([conflictPlaylist[@"entry"] count] != [serverPlaylist[@"entry"] count]) {
+                    shouldReplace = TRUE;
+                } else {
+                    if ([conflictPlaylist[@"entry"] count] == 0) shouldReplace = TRUE;
+                    for (int i=0;i<[conflictPlaylist[@"entry"] count];i++) {
+                        if (conflictPlaylist[@"entry"][i][@"id"] != serverPlaylist[@"entry"][i][@"id"]) {
+                            shouldReplace = TRUE;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (shouldReplace) {
+                [playlists replaceObjectAtIndex:conflictIdx withObject:serverPlaylist];
+            } else {
+                [playlists addObject:serverPlaylist];
+                [conflicts addObject:@{
+                 @"localPlaylist":conflictPlaylist,
+                 @"serverPlaylist":serverPlaylist
+                 }];
+            }
+        }
+    }
+    [playlists sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1[@"name"] compare:obj2[@"name"] options:NSCaseInsensitiveSearch|NSNumericSearch];
+    }];
+    NSString *temporaryPlaylistFile = [cacheDirectory stringByAppendingPathComponent:@"tempPlaylist.plist"];
+    NSMutableDictionary *tempPlaylist;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:temporaryPlaylistFile]) {
+        tempPlaylist = [[NSMutableDictionary alloc] initWithContentsOfFile:temporaryPlaylistFile];
+    } else {
+        tempPlaylist = [@{@"entry":[[NSMutableArray alloc] init],@"name":@"On The Fly Playlist",@"temporary":@YES} mutableCopy];
+        [tempPlaylist writeToFile:temporaryPlaylistFile atomically:YES];
+    }
+    [playlists insertObject:tempPlaylist atIndex:0];
+    [SVProgressHUD dismiss];
+    if ([conflicts count] > 0) {
+        [self performSegueWithIdentifier:@"ConflictResolutionSegue" sender:self context:conflicts];
+    }
+}
+
+- (void) playlistSyncDidSucceed {
+    for (NSMutableDictionary *playlistToUpdate in playlists) {
+        playlistToUpdate[@"canBeReplaced"] = @YES;
+    }
+    [self writePlaylistsToFile];
+    [[SubsonicRequestManager sharedInstance] getPlaylistsWithDelegate:self];
 }
 
 #pragma mark - SettingsUpdateProtocol
@@ -655,6 +862,62 @@ typedef enum {
 - (void) didUpdateSettingsToSettingsObject:(SettingsObject *)settingsObject {
     [settingsDelegate didUpdateSettingsToSettingsObject:settingsObject];
 }
+
+#pragma mark - ConflictResolutionProtocol
+
+- (void)conflictResolutionViewController:(ConflictResolutionViewController *)conflictResolutionViewController didRemovePlaylists:(NSArray *)playlistsToRemove {
+    [playlists removeObjectsInArray:playlistsToRemove];
+    [self writePlaylistsToFile];
+    [conflictResolutionViewController.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma - mark UISearchBarProtocol
+
+- (void) searchBarTextDidBeginEditing:(UISearchBar *)theSearchBar {
+    [UIView animateWithDuration:.3
+                     animations:^ {
+                         theSearchBar.frame = CGRectMake(0, 0, 300, 44);
+                         [theSearchBar layoutSubviews];
+                     }];
+}
+
+
+- (void) searchBarTextDidEndEditing:(UISearchBar *)theSearchBar {
+    [UIView animateWithDuration:.3
+                     animations:^ {
+                         theSearchBar.frame = CGRectMake(0, 0, 120, 44);
+                         [theSearchBar layoutSubviews];
+                     }];
+}
+
+#pragma mark Remote-control event handling
+// Respond to remote control events
+- (void) remoteControlReceivedWithEvent: (UIEvent *) receivedEvent {
+    if (receivedEvent.type == UIEventTypeRemoteControl) {
+        
+        switch (receivedEvent.subtype) {
+                
+            case UIEventSubtypeRemoteControlTogglePlayPause:
+                if ([as isPlaying]) {
+                    [as pause];
+                } else {
+                    [as start];
+                }
+                break;
+            case UIEventSubtypeRemoteControlPreviousTrack:
+                [self prevSong:nil];
+                break;
+                
+            case UIEventSubtypeRemoteControlNextTrack:
+                [self nextSong:nil];
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
 
 
 @end

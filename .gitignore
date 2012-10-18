@@ -13,3 +13,14 @@ build/*
 xcuserdata
 profile
 *.moved-aside
+Crashlytics.framework/*
+Crashlytics.framework
+Headers/*
+Headers
+Versions/*
+Versions
+Resources
+Resources/*
+run
+.gitignore
+.DS_Store

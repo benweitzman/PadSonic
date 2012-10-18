@@ -18,7 +18,7 @@ typedef enum {
     ServerErrorUnknownError
 } SubsonicServerError;
 
-@protocol SubsonicArtistSectionsRequestDelegate, SubsonicArtistAlbumsRequestDelegate, SubsonicAlbumSongsRequestDelegate, SubsonicArtistSongsRequestDelegate, SubsonicAlbumCoverRequestDelegate, SubsonicPingRequestDelegate, SubsonicResetSessionDelegate, SubsonicMusicFoldersRequestDelegate, SubsonicPlaylistRequestDelegate;
+@protocol SubsonicArtistSectionsRequestDelegate, SubsonicArtistAlbumsRequestDelegate, SubsonicAlbumSongsRequestDelegate, SubsonicArtistSongsRequestDelegate, SubsonicAlbumCoverRequestDelegate, SubsonicPingRequestDelegate, SubsonicResetSessionDelegate, SubsonicMusicFoldersRequestDelegate, SubsonicPlaylistRequestDelegate, SubsonicPlaylistSyncDelegate;
 
 @interface SubsonicRequestManager : NSObject
 
@@ -36,6 +36,7 @@ typedef enum {
 - (void) resetSessionWithDelegate:(NSObject <SubsonicResetSessionDelegate> *)delegate;
 - (void) requestMusicFoldersWithDelegate:(NSObject <SubsonicMusicFoldersRequestDelegate> *)delegate;
 - (void) getPlaylistsWithDelegate:(NSObject <SubsonicPlaylistRequestDelegate> *) delegate;
+- (void) syncPlaylists:(NSArray*)playlists withDelegate:(NSObject <SubsonicPlaylistSyncDelegate>*) delegate;
 - (NSURL *) getStreamURLForID:(NSString *)ID;
 
 @end
@@ -99,5 +100,12 @@ typedef enum {
 
 - (void) playlistRequestDidFail;
 - (void) playlistRequestDidSucceedwithPlaylists:(NSMutableArray *)playlists;
+
+@end
+
+@protocol SubsonicPlaylistSyncDelegate <NSObject>
+
+- (void) playlistSyncDidFail;
+- (void) playlistSyncDidSucceed;
 
 @end

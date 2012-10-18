@@ -12,9 +12,11 @@
 #import "SubsonicRequestManager.h"
 #import "PlaylistViewController.h"
 #import "AudioStreamer.h"
+#import "PlaylistSelectViewController.h"
+#import "ConflictResolutionViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 
-@interface DetailViewController : UIViewController <UISplitViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, SubsonicArtistAlbumsRequestDelegate, SubsonicAlbumSongsRequestDelegate, SubsonicArtistSongsRequestDelegate, PlaylistEditorDelegate, SubsonicPingRequestDelegate, SettingsUpdateProtocol, SubsonicPlaylistRequestDelegate>
+@interface DetailViewController : UIViewController <UISplitViewControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate, SubsonicArtistAlbumsRequestDelegate, SubsonicAlbumSongsRequestDelegate, SubsonicArtistSongsRequestDelegate, PlaylistEditorDelegate, SubsonicPingRequestDelegate, SettingsUpdateProtocol, SubsonicPlaylistRequestDelegate, PlaylistSelectDelegate, SubsonicPlaylistSyncDelegate, ConflictResolutionDelegate, UISearchBarDelegate>
 
 @property (strong, nonatomic) id detailItem;
 @property (strong, nonatomic) AVQueuePlayer *player;
@@ -28,6 +30,7 @@
 @property (strong, nonatomic) NSMutableArray *playlists;
 @property (nonatomic) NSInteger playlistIndex;
 @property (nonatomic) NSInteger currentPlaylist;
+@property (strong, nonatomic) UISearchBar *searchBar;
 
 
 @property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
@@ -47,6 +50,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *artistAlbumLabel;
 @property (strong, nonatomic) IBOutlet UIButton *nextButton;
 @property (strong, nonatomic) IBOutlet UIButton *prevButton;
+
 - (IBAction)nextSong:(id)sender;
 - (IBAction)prevSong:(id)sender;
 

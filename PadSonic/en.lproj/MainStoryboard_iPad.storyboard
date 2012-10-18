@@ -290,7 +290,6 @@ artist</string>
                             <constraint firstAttribute="bottom" secondItem="N53-Nl-mwR" secondAttribute="bottom" constant="57" id="0oL-sR-WDY"/>
                             <constraint firstItem="PE1-BX-nuS" firstAttribute="trailing" secondItem="NDL-1i-oiW" secondAttribute="trailing" type="default" id="4Uw-C2-ZvU"/>
                             <constraint firstItem="NDL-1i-oiW" firstAttribute="leading" secondItem="V95-ho-oAL" secondAttribute="leading" type="user" id="5jM-YA-KCh"/>
-                            <constraint firstItem="NDL-1i-oiW" firstAttribute="centerX" secondItem="aVB-xS-gHg" secondAttribute="centerX" type="default" id="6Zn-2E-4Xt"/>
                             <constraint firstItem="aVB-xS-gHg" firstAttribute="top" secondItem="26" secondAttribute="top" constant="20" symbolic="YES" type="default" id="70t-Kq-vug"/>
                             <constraint firstItem="vnL-er-6nL" firstAttribute="leading" secondItem="26" secondAttribute="leading" constant="81" id="9mR-6a-gMr"/>
                             <constraint firstItem="aVB-xS-gHg" firstAttribute="centerY" secondItem="NDL-1i-oiW" secondAttribute="centerY" type="default" id="9tw-Jn-J1U"/>
@@ -299,10 +298,13 @@ artist</string>
                             <constraint firstAttribute="bottom" secondItem="V95-ho-oAL" secondAttribute="bottom" constant="119" type="user" id="Cab-AQ-HV6"/>
                             <constraint firstItem="0UV-GR-Zxl" firstAttribute="leading" secondItem="26" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="D3a-ic-KFn"/>
                             <constraint firstItem="vnL-er-6nL" firstAttribute="top" secondItem="JPl-Kl-MmU" secondAttribute="top" type="default" id="DFF-JQ-U2C"/>
+                            <constraint firstAttribute="bottom" secondItem="lmA-y2-0Al" secondAttribute="bottom" constant="31" id="DGS-bj-4ck"/>
                             <constraint firstItem="NDL-1i-oiW" firstAttribute="bottom" secondItem="PE1-BX-nuS" secondAttribute="bottom" type="user" id="Dzs-xc-eyF"/>
                             <constraint firstItem="Fej-IG-LxA" firstAttribute="leading" secondItem="lmA-y2-0Al" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="E0d-EA-MJh"/>
-                            <constraint firstAttribute="trailing" secondItem="0UV-GR-Zxl" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Gsp-fp-coY"/>
+                            <constraint firstItem="lmA-y2-0Al" firstAttribute="centerX" secondItem="N53-Nl-mwR" secondAttribute="centerX" type="default" id="FsQ-F4-0dg"/>
                             <constraint firstItem="5jL-f7-k0P" firstAttribute="leading" secondItem="26" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="HXu-Xz-83k"/>
+                            <constraint firstItem="lmA-y2-0Al" firstAttribute="centerX" secondItem="V95-ho-oAL" secondAttribute="centerX" type="default" id="Hc9-cA-e72"/>
+                            <constraint firstItem="lmA-y2-0Al" firstAttribute="centerX" secondItem="5jL-f7-k0P" secondAttribute="centerX" type="default" id="IJw-J4-xmF"/>
                             <constraint firstItem="5gc-RD-BSX" firstAttribute="leading" secondItem="V95-ho-oAL" secondAttribute="leading" type="user" id="Jpd-f2-0b1"/>
                             <constraint firstItem="Fej-IG-LxA" firstAttribute="top" secondItem="rAk-GM-t88" secondAttribute="top" type="default" id="K1s-BU-c3b"/>
                             <constraint firstAttribute="trailing" secondItem="aVB-xS-gHg" secondAttribute="trailing" constant="20" symbolic="YES" type="user" id="K8L-XB-25x"/>
@@ -311,14 +313,12 @@ artist</string>
                             <constraint firstItem="N53-Nl-mwR" firstAttribute="leading" secondItem="26" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="MGg-lW-JQV"/>
                             <constraint firstItem="5gc-RD-BSX" firstAttribute="trailing" secondItem="NDL-1i-oiW" secondAttribute="trailing" type="user" id="OfJ-7M-zLm"/>
                             <constraint firstItem="vnL-er-6nL" firstAttribute="top" secondItem="Ils-2s-uWJ" secondAttribute="top" type="default" id="R3L-1a-hLY"/>
-                            <constraint firstAttribute="centerX" secondItem="lmA-y2-0Al" secondAttribute="centerX" type="user" id="RPV-KA-wVq"/>
+                            <constraint firstItem="lmA-y2-0Al" firstAttribute="centerX" secondItem="aVB-xS-gHg" secondAttribute="centerX" type="default" id="TO7-Ry-Ilz"/>
                             <constraint firstAttribute="bottom" secondItem="0UV-GR-Zxl" secondAttribute="bottom" constant="82" id="VZr-57-ojq"/>
                             <constraint firstItem="aVB-xS-gHg" firstAttribute="leading" secondItem="26" secondAttribute="leading" constant="20" symbolic="YES" type="user" id="Vb8-Kk-M50"/>
                             <constraint firstItem="Ils-2s-uWJ" firstAttribute="bottom" secondItem="vnL-er-6nL" secondAttribute="bottom" type="default" id="YIA-bL-GFH"/>
                             <constraint firstItem="kn9-pp-mew" firstAttribute="top" secondItem="Ils-2s-uWJ" secondAttribute="top" type="default" id="ZwC-7D-PFT"/>
-                            <constraint firstAttribute="trailing" secondItem="5jL-f7-k0P" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="aMg-GK-dm7"/>
                             <constraint firstItem="Ils-2s-uWJ" firstAttribute="leading" secondItem="Fej-IG-LxA" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="cZU-Nl-78A"/>
-                            <constraint firstAttribute="trailing" secondItem="N53-Nl-mwR" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="dPc-UB-3qq"/>
                             <constraint firstAttribute="bottom" secondItem="rAk-GM-t88" secondAttribute="bottom" constant="30" id="eF9-6e-Rip"/>
                             <constraint firstItem="JPl-Kl-MmU" firstAttribute="baseline" secondItem="vnL-er-6nL" secondAttribute="baseline" type="user" id="fxS-gH-rmW"/>
                             <constraint firstAttribute="bottom" secondItem="JPl-Kl-MmU" secondAttribute="bottom" constant="17" id="hbT-kU-noN"/>
@@ -328,12 +328,12 @@ artist</string>
                             <constraint firstItem="JPl-Kl-MmU" firstAttribute="bottom" secondItem="vnL-er-6nL" secondAttribute="bottom" type="default" id="n57-b1-4Kq"/>
                             <constraint firstItem="5gc-RD-BSX" firstAttribute="bottom" secondItem="V95-ho-oAL" secondAttribute="bottom" type="default" id="nZy-4c-cbI"/>
                             <constraint firstItem="NDL-1i-oiW" firstAttribute="leading" secondItem="PE1-BX-nuS" secondAttribute="leading" type="user" id="p0j-zL-aCA"/>
+                            <constraint firstItem="lmA-y2-0Al" firstAttribute="centerX" secondItem="0UV-GR-Zxl" secondAttribute="centerX" type="default" id="qUM-Yl-JzL"/>
                             <constraint firstAttribute="bottom" secondItem="5jL-f7-k0P" secondAttribute="bottom" constant="110" type="user" id="qix-Z5-tvh"/>
                             <constraint firstItem="kn9-pp-mew" firstAttribute="baseline" secondItem="Ils-2s-uWJ" secondAttribute="baseline" type="default" id="sXG-X1-4na"/>
                             <constraint firstItem="V95-ho-oAL" firstAttribute="top" secondItem="26" secondAttribute="top" constant="300" type="user" id="t0x-fl-OWU"/>
                             <constraint firstItem="kn9-pp-mew" firstAttribute="leading" secondItem="Ils-2s-uWJ" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="tGC-dO-QmN"/>
                             <constraint firstItem="NDL-1i-oiW" firstAttribute="top" secondItem="PE1-BX-nuS" secondAttribute="top" type="user" id="uzk-fQ-ZC4"/>
-                            <constraint firstItem="lmA-y2-0Al" firstAttribute="bottom" secondItem="Fej-IG-LxA" secondAttribute="bottom" type="default" id="yhq-ZU-N7H"/>
                             <constraint firstItem="rAk-GM-t88" firstAttribute="baseline" secondItem="Fej-IG-LxA" secondAttribute="baseline" type="default" id="zRq-vb-K4C"/>
                             <constraint firstItem="V95-ho-oAL" firstAttribute="centerY" secondItem="5jL-f7-k0P" secondAttribute="centerY" type="user" id="zlJ-YM-l6f"/>
                             <constraint firstItem="5jL-f7-k0P" firstAttribute="top" secondItem="26" secondAttribute="top" constant="291" type="user" id="zxs-nH-ANs"/>
@@ -366,11 +366,12 @@ artist</string>
                         <outlet property="tableBackground" destination="5jL-f7-k0P" id="SAg-Hf-JbI"/>
                         <outlet property="timerLeft" destination="rAk-GM-t88" id="UIm-jk-N97"/>
                         <outlet property="timerRight" destination="Fej-IG-LxA" id="fW7-kT-ED9"/>
+                        <segue destination="ZMq-Hi-7n1" kind="modal" identifier="ConflictResolutionSegue" modalPresentationStyle="pageSheet" modalTransitionStyle="coverVertical" id="cWm-gQ-QZD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="15" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="448" y="248"/>
+            <point key="canvasLocation" x="460" y="260"/>
         </scene>
         <!--Settings View Controller - Settings-->
         <scene sceneID="UQS-0Z-zzh">
@@ -406,10 +407,10 @@ artist</string>
             </objects>
             <point key="canvasLocation" x="1928" y="322"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Automatic Dismiss Keyboard Navigation Controller View Controller-->
         <scene sceneID="MTm-k0-j4z">
             <objects>
-                <navigationController definesPresentationContext="YES" id="KdY-am-cCr" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="KdY-am-cCr" customClass="AutomaticDismissKeyboardNavigationControllerViewController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Th7-HM-01G">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -421,26 +422,34 @@ artist</string>
             </objects>
             <point key="canvasLocation" x="1268" y="1060"/>
         </scene>
-        <!--Playlist View Controller-->
+        <!--Playlist View Controller - Playlists-->
         <scene sceneID="obj-f4-A8i">
             <objects>
                 <viewController id="qj1-Iq-7Kx" customClass="PlaylistViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uhn-WU-0DJ">
-                        <rect key="frame" x="0.0" y="64" width="540" height="556"/>
+                        <rect key="frame" x="0.0" y="44" width="540" height="576"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YzJ-hk-jio"/>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="BC3-yS-6rt">
+                                <connections>
+                                    <action selector="changePage:" destination="qj1-Iq-7Kx" eventType="valueChanged" id="t5S-rJ-bJn"/>
+                                </connections>
+                            </pageControl>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="YzJ-hk-jio" firstAttribute="bottom" secondItem="uhn-WU-0DJ" secondAttribute="bottom" type="default" id="1l0-Tv-gkt"/>
                             <constraint firstItem="YzJ-hk-jio" firstAttribute="leading" secondItem="uhn-WU-0DJ" secondAttribute="leading" type="default" id="2QR-d8-RkO"/>
+                            <constraint firstItem="BC3-yS-6rt" firstAttribute="leading" secondItem="uhn-WU-0DJ" secondAttribute="leading" type="default" id="33z-y9-pzf"/>
+                            <constraint firstItem="BC3-yS-6rt" firstAttribute="bottom" secondItem="uhn-WU-0DJ" secondAttribute="bottom" type="default" id="Rox-QA-B3p"/>
                             <constraint firstItem="YzJ-hk-jio" firstAttribute="trailing" secondItem="uhn-WU-0DJ" secondAttribute="trailing" type="default" id="Uz4-cv-E9W"/>
+                            <constraint firstItem="BC3-yS-6rt" firstAttribute="trailing" secondItem="uhn-WU-0DJ" secondAttribute="trailing" type="default" id="aaq-CM-trv"/>
+                            <constraint firstAttribute="bottom" secondItem="YzJ-hk-jio" secondAttribute="bottom" constant="36" id="fSO-GI-gwY"/>
                             <constraint firstItem="YzJ-hk-jio" firstAttribute="top" secondItem="uhn-WU-0DJ" secondAttribute="top" type="default" id="ojW-cG-E55"/>
                         </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
-                    <navigationItem key="navigationItem" id="U0Y-dm-wGu">
+                    <navigationItem key="navigationItem" title="Playlists" id="U0Y-dm-wGu">
                         <barButtonItem key="leftBarButtonItem" title="Edit" id="XEd-sL-9t5">
                             <connections>
                                 <action selector="toggleEditing:" destination="qj1-Iq-7Kx" id="Hsp-AZ-AN6"/>
@@ -452,8 +461,11 @@ artist</string>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="editButton" destination="XEd-sL-9t5" id="Css-zU-jJV"/>
+                        <outlet property="pageControl" destination="BC3-yS-6rt" id="H4j-vD-4jV"/>
                         <outlet property="scrollView" destination="YzJ-hk-jio" id="AnV-H7-j9J"/>
                     </connections>
                 </viewController>
@@ -590,6 +602,70 @@ artist</string>
             </objects>
             <point key="canvasLocation" x="-366" y="248"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="4I1-pQ-7v2">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="ZMq-Hi-7n1" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="egh-Ht-mwq">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="VyN-1Q-OU7" kind="relationship" relationship="rootViewController" id="lcn-SY-p8i"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Eym-1f-Sok" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="904" y="1795"/>
+        </scene>
+        <!--Conflict Resolution View Controller - Playlist Conflict Resolution-->
+        <scene sceneID="fQ4-t6-D2Z">
+            <objects>
+                <viewController id="VyN-1Q-OU7" customClass="ConflictResolutionViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JjB-Yp-Ipb">
+                        <rect key="frame" x="0.0" y="64" width="768" height="704"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="QO3-W3-mSQ">
+                                <connections>
+                                    <action selector="pageControlTapped:" destination="VyN-1Q-OU7" eventType="valueChanged" id="fVD-De-cBB"/>
+                                </connections>
+                            </pageControl>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yKn-lh-0AD">
+                                <connections>
+                                    <outlet property="delegate" destination="VyN-1Q-OU7" id="lb0-QJ-0oK"/>
+                                </connections>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="QO3-W3-mSQ" firstAttribute="trailing" secondItem="JjB-Yp-Ipb" secondAttribute="trailing" type="default" id="2ba-S9-YQZ"/>
+                            <constraint firstItem="yKn-lh-0AD" firstAttribute="top" secondItem="JjB-Yp-Ipb" secondAttribute="top" type="default" id="3LE-xU-ufG"/>
+                            <constraint firstItem="yKn-lh-0AD" firstAttribute="leading" secondItem="JjB-Yp-Ipb" secondAttribute="leading" type="default" id="91F-nV-28n"/>
+                            <constraint firstItem="yKn-lh-0AD" firstAttribute="trailing" secondItem="JjB-Yp-Ipb" secondAttribute="trailing" type="default" id="Alk-Du-Riw"/>
+                            <constraint firstAttribute="bottom" secondItem="yKn-lh-0AD" secondAttribute="bottom" constant="36" id="OC5-7b-Nt5"/>
+                            <constraint firstItem="QO3-W3-mSQ" firstAttribute="leading" secondItem="JjB-Yp-Ipb" secondAttribute="leading" type="default" id="iz0-fn-5g6"/>
+                            <constraint firstItem="QO3-W3-mSQ" firstAttribute="bottom" secondItem="JjB-Yp-Ipb" secondAttribute="bottom" type="default" id="ydp-Sh-IKN"/>
+                        </constraints>
+                        <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Playlist Conflict Resolution" id="yZA-I7-cJJ">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="tdJ-sc-hPt">
+                            <connections>
+                                <action selector="finish:" destination="VyN-1Q-OU7" id="dQ8-wd-eW1"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="pageControl" destination="QO3-W3-mSQ" id="eha-fl-Ea7"/>
+                        <outlet property="scrollView" destination="yKn-lh-0AD" id="cLb-D5-Crt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dJs-l2-VqN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2044" y="1795"/>
+        </scene>
     </scenes>
     <resources>
         <image name="blueButton.png" width="36" height="36"/>
@@ -610,6 +686,15 @@ artist</string>
         </class>
         <class className="AutomaticDismissKeyboardNavigationControllerViewController" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/AutomaticDismissKeyboardNavigationControllerViewController.h"/>
+        </class>
+        <class className="ConflictResolutionViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ConflictResolutionViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="finish:"/>
+                <relationship kind="action" name="pageControlTapped:"/>
+                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
         </class>
         <class className="DetailViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DetailViewController.h"/>
@@ -647,9 +732,11 @@ artist</string>
         <class className="PlaylistViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PlaylistViewController.h"/>
             <relationships>
+                <relationship kind="action" name="changePage:"/>
                 <relationship kind="action" name="close:"/>
                 <relationship kind="action" name="toggleEditing:"/>
                 <relationship kind="outlet" name="editButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>

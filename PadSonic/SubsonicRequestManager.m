@@ -265,12 +265,57 @@
             NSString *playlistURLString = [NSString stringWithFormat:@"http://%@/rest/getPlaylist.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&id=%@",server,username,password,playlist[@"id"]];
             NSData *playlistResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:playlistURLString]];
             NSData *escapedData = [[[[NSString alloc] initWithData:playlistResponse encoding:NSUTF8StringEncoding] gtm_stringByUnescapingFromHTML] dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *subsonicResponse2 = [[JSONDecoder decoder] mutableObjectWithData:escapedData];
+            NSMutableDictionary *subsonicResponse2 = [[JSONDecoder decoder] mutableObjectWithData:escapedData];
+            if ([subsonicResponse2[@"subsonic-response"][@"playlist"][@"entry"] isKindOfClass:[NSString class]] || subsonicResponse2[@"subsonic-response"][@"playlist"][@"entry"] == nil) {
+                subsonicResponse2[@"subsonic-response"][@"playlist"][@"entry"] = [[NSMutableArray alloc] init];
+            } else if (![subsonicResponse2[@"subsonic-response"][@"playlist"][@"entry"] isKindOfClass:[NSArray class]]) {
+                subsonicResponse2[@"subsonic-response"][@"playlist"][@"entry"] = [@[subsonicResponse2[@"subsonic-response"][@"playlist"][@"entry"]] mutableCopy];
+            }
             [playlistHolder addObject:subsonicResponse2[@"subsonic-response"][@"playlist"]];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [delegate playlistRequestDidSucceedwithPlaylists:playlistHolder];
         });
+    });
+}
+
+- (void) syncPlaylists:(NSMutableArray *)userPlaylists withDelegate:(NSObject<SubsonicPlaylistSyncDelegate> *)delegate {
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        NSMutableString *playlistURLString = [NSMutableString stringWithFormat:@"http://%@/rest/getPlaylists.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld",server,username,password];
+        NSData *playlistsResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:playlistURLString]];
+        NSMutableDictionary *subsonicResponse = [[JSONDecoder decoder] mutableObjectWithData:playlistsResponse];
+        NSObject *playlistsObjectContainer = subsonicResponse[@"subsonic-response"][@"playlists"];
+        NSArray *playlists;
+        if ([playlistsObjectContainer isKindOfClass:[NSString class]]) {
+            playlists = @[];
+        } else {
+            NSObject *playlistsObject = ((NSDictionary *)playlistsObjectContainer)[@"playlist"];
+            if (playlistsObject == nil) {
+                playlists = @[];
+            } else {
+                if ([playlistsObject isKindOfClass:[NSArray class]])
+                    playlists = (NSArray*)playlistsObject;
+                else
+                    playlists = @[playlistsObject];
+            }
+        }
+        for (NSDictionary *playlist in playlists) {
+            NSString *deletePlaylistURLString = [NSString stringWithFormat:@"http://%@/rest/deletePlaylist.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&id=%@",server,username,password,playlist[@"id"]];
+            NSData *deletePlaylistResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:deletePlaylistURLString]];
+            (void) deletePlaylistResponse;
+        }
+        for (NSMutableDictionary *playlist in userPlaylists) {
+            NSMutableString *newPlaylistURLString = [NSMutableString stringWithFormat:@"http://%@/rest/createPlaylist.view?f=json&u=%@&p=%@&v=1.7.0&c=helloworld&name=%@",server,username,password,playlist[@"name"]];
+            for (NSDictionary *song in playlist[@"entry"]) {
+                [newPlaylistURLString appendFormat:@"&songId=%@",song[@"id"]];
+            }
+            newPlaylistURLString = [newPlaylistURLString stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+            NSLog(@"%@",newPlaylistURLString);
+            NSData *newPlaylistResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:newPlaylistURLString]];
+            (void) newPlaylistResponse;
+        }
+        [delegate playlistSyncDidSucceed];
     });
 }
 

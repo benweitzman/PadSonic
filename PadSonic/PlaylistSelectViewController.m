@@ -1,19 +1,19 @@
 //
-//  SelectMusicFolderViewController.m
+//  PlaylistSelectViewController.m
 //  PadSonic
 //
-//  Created by Ben Weitzman on 10/9/12.
+//  Created by Ben Weitzman on 10/11/12.
 //  Copyright (c) 2012 Ben Weitzman. All rights reserved.
 //
 
-#import "SelectMusicFolderViewController.h"
+#import "PlaylistSelectViewController.h"
 
-@interface SelectMusicFolderViewController ()
+@interface PlaylistSelectViewController ()
 
 @end
 
-@implementation SelectMusicFolderViewController
-@synthesize folders, delegate;
+@implementation PlaylistSelectViewController
+@synthesize delegate, playlists;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -27,17 +27,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-   
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    folders = [[NSArray alloc] init];
-    [[SubsonicRequestManager sharedInstance] requestMusicFoldersWithDelegate:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,23 +52,21 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [folders count];
+    NSLog(@"%@",playlists);
+    return [playlists count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.textLabel.text = folders[indexPath.row][@"name"];
-    if (isiPad()) {
-        if ([folders[indexPath.row][@"id"] intValue] == [[SubsonicRequestManager sharedInstance] musicFolder]) {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        } else {
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-    } else {
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if(cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        
     }
+    // Configure the cell...
+    cell.textLabel.text = playlists[indexPath.row][@"name"];
     
     return cell;
 }
@@ -121,29 +114,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [[SubsonicRequestManager sharedInstance] setMusicFolder:[folders[indexPath.row][@"id"] intValue]];
-    [self.tableView reloadData];
-    if (isiPhone()) {
-        [self performSegueWithIdentifier:@"ShowArtists" sender:self];
-    } else {
-        [delegate selectMusicFolderViewController:self didSelectFolderWithID:[folders[indexPath.row][@"id"] intValue]];
-    }
-}
-
-#pragma mark - SubsonicFolderRequestProtocol
-
-- (void) musicFolderRequestDidFail {
-}
-
-- (void) musicFolderRequestDidSucceedWithFolders:(NSArray *)musicFolders {
-    folders = musicFolders;
-    [self.tableView reloadData];
-}
-
-#pragma mark - Segues
-
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSLog(@"segueu!");
+    [delegate playlistSelectViewController:self didSelectPlaylistWithIndex:indexPath.row];
 }
 
 @end

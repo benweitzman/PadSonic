@@ -112,6 +112,10 @@
 		DA3C937A1623629100731F24 /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3C9377162360F100731F24 /* SSKeychain.m */; };
 		DA3C937D162394C800731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA3C937C162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m */; };
 		DA3C93821623B13A00731F24 /* transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = DA3C93811623B13A00731F24 /* transparent.png */; };
+		DA9832BF1629E70300C24967 /* padsonicicon72-01.png in Resources */ = {isa = PBXBuildFile; fileRef = DA9832BE1629E70300C24967 /* padsonicicon72-01.png */; };
+		DA9832C11629E70A00C24967 /* padsonicicon144-01.png in Resources */ = {isa = PBXBuildFile; fileRef = DA9832C01629E70A00C24967 /* padsonicicon144-01.png */; };
+		DA9832CE1629ECD000C24967 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9832CD1629ECD000C24967 /* Crashlytics.framework */; };
+		DA9832D01629ED2A00C24967 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA9832CF1629ED2A00C24967 /* Crashlytics.framework */; };
 		DAA57B7B162607D600476DCC /* glyphicons_008_film.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B7A162607D600476DCC /* glyphicons_008_film.png */; };
 		DAA57B7E162632EF00476DCC /* glyphicons_008_film@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B7D162632EF00476DCC /* glyphicons_008_film@2x.png */; };
 		DAA57B801626330300476DCC /* glyphicons_158_playlist@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B7F1626330300476DCC /* glyphicons_158_playlist@2x.png */; };
@@ -121,6 +125,24 @@
 		DAA57B891626332900476DCC /* glyphicons_176_forward@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B841626332900476DCC /* glyphicons_176_forward@2x.png */; };
 		DAA57B8A1626332900476DCC /* glyphicons_184_volume_up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAA57B851626332900476DCC /* glyphicons_184_volume_up@2x.png */; };
 		DAA57B8E16263B5100476DCC /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA57B8D16263B5100476DCC /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DAA57B9316269E7A00476DCC /* PlaylistSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA57B9216269E7A00476DCC /* PlaylistSelectViewController.m */; };
+		DAACFD17162D057300D59EDD /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD16162D057300D59EDD /* Default-Landscape@2x~ipad.png */; };
+		DAACFD1A162D090A00D59EDD /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD19162D090A00D59EDD /* Default-Portrait@2x~ipad.png */; };
+		DAACFD32162E130D00D59EDD /* ConflictResolutionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAACFD31162E130D00D59EDD /* ConflictResolutionViewController.m */; };
+		DAACFD36162E1D4500D59EDD /* A2StoryboardSegueContext.m in Sources */ = {isa = PBXBuildFile; fileRef = DAACFD35162E1D4500D59EDD /* A2StoryboardSegueContext.m */; };
+		DAACFD3A162E2E8F00D59EDD /* glyphicons_150_check.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD38162E2E8F00D59EDD /* glyphicons_150_check.png */; };
+		DAACFD3B162E2E8F00D59EDD /* glyphicons_150_check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD39162E2E8F00D59EDD /* glyphicons_150_check@2x.png */; };
+		DAACFD3E162E2EC300D59EDD /* glyphicons_193_circle_ok.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD3C162E2EC300D59EDD /* glyphicons_193_circle_ok.png */; };
+		DAACFD3F162E2EC300D59EDD /* glyphicons_193_circle_ok@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD3D162E2EC300D59EDD /* glyphicons_193_circle_ok@2x.png */; };
+		DAACFD42162E2ED300D59EDD /* glyphicons_198_ok.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD40162E2ED300D59EDD /* glyphicons_198_ok.png */; };
+		DAACFD43162E2ED300D59EDD /* glyphicons_198_ok@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD41162E2ED300D59EDD /* glyphicons_198_ok@2x.png */; };
+		DAACFD611630897500D59EDD /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAACFD601630897500D59EDD /* HomeViewController.m */; };
+		DAACFD6316308F1B00D59EDD /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD6216308F1B00D59EDD /* Default-568h@2x.png */; };
+		DAACFD66163092DE00D59EDD /* glyphicons_020_home.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD64163092DE00D59EDD /* glyphicons_020_home.png */; };
+		DAACFD67163092DE00D59EDD /* glyphicons_020_home@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD65163092DE00D59EDD /* glyphicons_020_home@2x.png */; };
+		DAACFD6A163093A700D59EDD /* glyphicons_144_folder_open.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD68163093A700D59EDD /* glyphicons_144_folder_open.png */; };
+		DAACFD6B163093A700D59EDD /* glyphicons_144_folder_open@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAACFD69163093A700D59EDD /* glyphicons_144_folder_open@2x.png */; };
+		DAACFD6E1630A0F400D59EDD /* PadsonicPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DAACFD6D1630A0F300D59EDD /* PadsonicPlayerManager.m */; };
 		DAAE66771623D42F00376108 /* grad.png in Resources */ = {isa = PBXBuildFile; fileRef = DAAE66761623D42F00376108 /* grad.png */; };
 		DAAE66871624C45200376108 /* SelectMusicFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAAE66861624C45200376108 /* SelectMusicFolderViewController.m */; };
 		DAB1E15116215D3C00830968 /* AudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB1E15016215D3C00830968 /* AudioStreamer.m */; };
@@ -298,6 +320,10 @@
 		DA3C937B162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutomaticDismissKeyboardNavigationControllerViewController.h; sourceTree = "<group>"; };
 		DA3C937C162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutomaticDismissKeyboardNavigationControllerViewController.m; sourceTree = "<group>"; };
 		DA3C93811623B13A00731F24 /* transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = transparent.png; sourceTree = "<group>"; };
+		DA9832BE1629E70300C24967 /* padsonicicon72-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "padsonicicon72-01.png"; sourceTree = "<group>"; };
+		DA9832C01629E70A00C24967 /* padsonicicon144-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "padsonicicon144-01.png"; sourceTree = "<group>"; };
+		DA9832CD1629ECD000C24967 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		DA9832CF1629ED2A00C24967 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DAA57B7A162607D600476DCC /* glyphicons_008_film.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_008_film.png; sourceTree = "<group>"; };
 		DAA57B7D162632EF00476DCC /* glyphicons_008_film@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_008_film@2x.png"; sourceTree = "<group>"; };
 		DAA57B7F1626330300476DCC /* glyphicons_158_playlist@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_158_playlist@2x.png"; sourceTree = "<group>"; };
@@ -309,6 +335,29 @@
 		DAA57B8C16263B5100476DCC /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
 		DAA57B8D16263B5100476DCC /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
 		DAA57B8F16263C2800476DCC /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		DAA57B9116269E7A00476DCC /* PlaylistSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaylistSelectViewController.h; sourceTree = "<group>"; };
+		DAA57B9216269E7A00476DCC /* PlaylistSelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaylistSelectViewController.m; sourceTree = "<group>"; };
+		DAACFD16162D057300D59EDD /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
+		DAACFD19162D090A00D59EDD /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
+		DAACFD30162E130D00D59EDD /* ConflictResolutionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConflictResolutionViewController.h; sourceTree = "<group>"; };
+		DAACFD31162E130D00D59EDD /* ConflictResolutionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConflictResolutionViewController.m; sourceTree = "<group>"; };
+		DAACFD34162E1D4500D59EDD /* A2StoryboardSegueContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = A2StoryboardSegueContext.h; sourceTree = "<group>"; };
+		DAACFD35162E1D4500D59EDD /* A2StoryboardSegueContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = A2StoryboardSegueContext.m; sourceTree = "<group>"; };
+		DAACFD38162E2E8F00D59EDD /* glyphicons_150_check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_150_check.png; sourceTree = "<group>"; };
+		DAACFD39162E2E8F00D59EDD /* glyphicons_150_check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_150_check@2x.png"; sourceTree = "<group>"; };
+		DAACFD3C162E2EC300D59EDD /* glyphicons_193_circle_ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_193_circle_ok.png; sourceTree = "<group>"; };
+		DAACFD3D162E2EC300D59EDD /* glyphicons_193_circle_ok@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_193_circle_ok@2x.png"; sourceTree = "<group>"; };
+		DAACFD40162E2ED300D59EDD /* glyphicons_198_ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_198_ok.png; sourceTree = "<group>"; };
+		DAACFD41162E2ED300D59EDD /* glyphicons_198_ok@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_198_ok@2x.png"; sourceTree = "<group>"; };
+		DAACFD5F1630897400D59EDD /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		DAACFD601630897500D59EDD /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		DAACFD6216308F1B00D59EDD /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		DAACFD64163092DE00D59EDD /* glyphicons_020_home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_020_home.png; sourceTree = "<group>"; };
+		DAACFD65163092DE00D59EDD /* glyphicons_020_home@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_020_home@2x.png"; sourceTree = "<group>"; };
+		DAACFD68163093A700D59EDD /* glyphicons_144_folder_open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = glyphicons_144_folder_open.png; sourceTree = "<group>"; };
+		DAACFD69163093A700D59EDD /* glyphicons_144_folder_open@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glyphicons_144_folder_open@2x.png"; sourceTree = "<group>"; };
+		DAACFD6C1630A0F100D59EDD /* PadsonicPlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PadsonicPlayerManager.h; sourceTree = "<group>"; };
+		DAACFD6D1630A0F300D59EDD /* PadsonicPlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PadsonicPlayerManager.m; sourceTree = "<group>"; };
 		DAAE66761623D42F00376108 /* grad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grad.png; sourceTree = "<group>"; };
 		DAAE66851624C45200376108 /* SelectMusicFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectMusicFolderViewController.h; sourceTree = "<group>"; };
 		DAAE66861624C45200376108 /* SelectMusicFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectMusicFolderViewController.m; sourceTree = "<group>"; };
@@ -334,6 +383,8 @@
 				DA1B48721620E0F60039246A /* UIKit.framework in Frameworks */,
 				DA1B48741620E0F60039246A /* Foundation.framework in Frameworks */,
 				DA1B48761620E0F60039246A /* CoreGraphics.framework in Frameworks */,
+				DA9832CE1629ECD000C24967 /* Crashlytics.framework in Frameworks */,
+				DA9832D01629ED2A00C24967 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +404,7 @@
 		DA053AF41621034400E829C1 /* External Sources */ = {
 			isa = PBXGroup;
 			children = (
+				DAACFD37162E1D4B00D59EDD /* A2StoryboardSegueContext */,
 				DAA57B8B16263B5100476DCC /* GMTNSString+HTML */,
 				DA3C9379162360F900731F24 /* SSKeychain */,
 				DA3C9367162345AF00731F24 /* SVProgressHUD */,
@@ -395,6 +447,11 @@
 		DA1B48621620E0F60039246A = {
 			isa = PBXGroup;
 			children = (
+				DAACFD6216308F1B00D59EDD /* Default-568h@2x.png */,
+				DAACFD19162D090A00D59EDD /* Default-Portrait@2x~ipad.png */,
+				DAACFD16162D057300D59EDD /* Default-Landscape@2x~ipad.png */,
+				DA9832C01629E70A00C24967 /* padsonicicon144-01.png */,
+				DA9832BE1629E70300C24967 /* padsonicicon72-01.png */,
 				DA053B0316211A9A00E829C1 /* Resources */,
 				DA053AF41621034400E829C1 /* External Sources */,
 				DA1B48771620E0F60039246A /* PadSonic */,
@@ -416,6 +473,8 @@
 		DA1B48701620E0F60039246A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA9832CF1629ED2A00C24967 /* Crashlytics.framework */,
+				DA9832CD1629ECD000C24967 /* Crashlytics.framework */,
 				DA2D963C1624F4D10099965C /* MediaPlayer.framework */,
 				DA3C937416235E9800731F24 /* Security.framework */,
 				DA3C92821621DFC400731F24 /* QuartzCore.framework */,
@@ -438,6 +497,10 @@
 				DA1B48811620E0F60039246A /* AppDelegate.m */,
 				DA1B48831620E0F60039246A /* MainStoryboard_iPhone.storyboard */,
 				DA1B48861620E0F60039246A /* MainStoryboard_iPad.storyboard */,
+				DAACFD5F1630897400D59EDD /* HomeViewController.h */,
+				DAACFD601630897500D59EDD /* HomeViewController.m */,
+				DAA57B9116269E7A00476DCC /* PlaylistSelectViewController.h */,
+				DAA57B9216269E7A00476DCC /* PlaylistSelectViewController.m */,
 				DAAE66851624C45200376108 /* SelectMusicFolderViewController.h */,
 				DAAE66861624C45200376108 /* SelectMusicFolderViewController.m */,
 				DA3C937B162394C700731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.h */,
@@ -452,6 +515,10 @@
 				DA3C92E316223E3C00731F24 /* SettingsViewController.m */,
 				DA3C936016224DBA00731F24 /* PlaylistViewController.h */,
 				DA3C936116224DBA00731F24 /* PlaylistViewController.m */,
+				DAACFD30162E130D00D59EDD /* ConflictResolutionViewController.h */,
+				DAACFD31162E130D00D59EDD /* ConflictResolutionViewController.m */,
+				DAACFD6C1630A0F100D59EDD /* PadsonicPlayerManager.h */,
+				DAACFD6D1630A0F300D59EDD /* PadsonicPlayerManager.m */,
 				DA3C92DF162209D600731F24 /* SubsonicRequestManager.h */,
 				DA3C92E0162209D600731F24 /* SubsonicRequestManager.m */,
 				DA1B48781620E0F60039246A /* Supporting Files */,
@@ -549,6 +616,12 @@
 			children = (
 				DAA57B7A162607D600476DCC /* glyphicons_008_film.png */,
 				DAA57B7D162632EF00476DCC /* glyphicons_008_film@2x.png */,
+				DAACFD64163092DE00D59EDD /* glyphicons_020_home.png */,
+				DAACFD65163092DE00D59EDD /* glyphicons_020_home@2x.png */,
+				DAACFD68163093A700D59EDD /* glyphicons_144_folder_open.png */,
+				DAACFD69163093A700D59EDD /* glyphicons_144_folder_open@2x.png */,
+				DAACFD38162E2E8F00D59EDD /* glyphicons_150_check.png */,
+				DAACFD39162E2E8F00D59EDD /* glyphicons_150_check@2x.png */,
 				DA3C936316225D9200731F24 /* glyphicons_158_playlist.png */,
 				DAA57B7F1626330300476DCC /* glyphicons_158_playlist@2x.png */,
 				DA2D963F162545B70099965C /* glyphicons_172_rewind.png */,
@@ -561,6 +634,10 @@
 				DAA57B841626332900476DCC /* glyphicons_176_forward@2x.png */,
 				DA3C93651622989F00731F24 /* glyphicons_184_volume_up.png */,
 				DAA57B851626332900476DCC /* glyphicons_184_volume_up@2x.png */,
+				DAACFD3C162E2EC300D59EDD /* glyphicons_193_circle_ok.png */,
+				DAACFD3D162E2EC300D59EDD /* glyphicons_193_circle_ok@2x.png */,
+				DAACFD40162E2ED300D59EDD /* glyphicons_198_ok.png */,
+				DAACFD41162E2ED300D59EDD /* glyphicons_198_ok@2x.png */,
 			);
 			name = Icons;
 			sourceTree = "<group>";
@@ -700,6 +777,15 @@
 			path = "GMTNSString+HTML";
 			sourceTree = "<group>";
 		};
+		DAACFD37162E1D4B00D59EDD /* A2StoryboardSegueContext */ = {
+			isa = PBXGroup;
+			children = (
+				DAACFD34162E1D4500D59EDD /* A2StoryboardSegueContext.h */,
+				DAACFD35162E1D4500D59EDD /* A2StoryboardSegueContext.m */,
+			);
+			name = A2StoryboardSegueContext;
+			sourceTree = "<group>";
+		};
 		DAB1E15316215D4000830968 /* AudioStreamer */ = {
 			isa = PBXGroup;
 			children = (
@@ -719,6 +805,7 @@
 				DA1B48691620E0F60039246A /* Sources */,
 				DA1B486A1620E0F60039246A /* Frameworks */,
 				DA1B486B1620E0F60039246A /* Resources */,
+				DA9832C21629E8A000C24967 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -837,6 +924,21 @@
 				DAA57B881626332900476DCC /* glyphicons_174_pause@2x.png in Resources */,
 				DAA57B891626332900476DCC /* glyphicons_176_forward@2x.png in Resources */,
 				DAA57B8A1626332900476DCC /* glyphicons_184_volume_up@2x.png in Resources */,
+				DA9832BF1629E70300C24967 /* padsonicicon72-01.png in Resources */,
+				DA9832C11629E70A00C24967 /* padsonicicon144-01.png in Resources */,
+				DAACFD17162D057300D59EDD /* Default-Landscape@2x~ipad.png in Resources */,
+				DAACFD1A162D090A00D59EDD /* Default-Portrait@2x~ipad.png in Resources */,
+				DAACFD3A162E2E8F00D59EDD /* glyphicons_150_check.png in Resources */,
+				DAACFD3B162E2E8F00D59EDD /* glyphicons_150_check@2x.png in Resources */,
+				DAACFD3E162E2EC300D59EDD /* glyphicons_193_circle_ok.png in Resources */,
+				DAACFD3F162E2EC300D59EDD /* glyphicons_193_circle_ok@2x.png in Resources */,
+				DAACFD42162E2ED300D59EDD /* glyphicons_198_ok.png in Resources */,
+				DAACFD43162E2ED300D59EDD /* glyphicons_198_ok@2x.png in Resources */,
+				DAACFD6316308F1B00D59EDD /* Default-568h@2x.png in Resources */,
+				DAACFD66163092DE00D59EDD /* glyphicons_020_home.png in Resources */,
+				DAACFD67163092DE00D59EDD /* glyphicons_020_home@2x.png in Resources */,
+				DAACFD6A163093A700D59EDD /* glyphicons_144_folder_open.png in Resources */,
+				DAACFD6B163093A700D59EDD /* glyphicons_144_folder_open@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -863,6 +965,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		DA9832C21629E8A000C24967 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Crashlytics.framework/run e15182a6b718cd3a2034de1f40245dbf89968515";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -918,6 +1033,11 @@
 				DA3C937D162394C800731F24 /* AutomaticDismissKeyboardNavigationControllerViewController.m in Sources */,
 				DAAE66871624C45200376108 /* SelectMusicFolderViewController.m in Sources */,
 				DAA57B8E16263B5100476DCC /* GTMNSString+HTML.m in Sources */,
+				DAA57B9316269E7A00476DCC /* PlaylistSelectViewController.m in Sources */,
+				DAACFD32162E130D00D59EDD /* ConflictResolutionViewController.m in Sources */,
+				DAACFD36162E1D4500D59EDD /* A2StoryboardSegueContext.m in Sources */,
+				DAACFD611630897500D59EDD /* HomeViewController.m in Sources */,
+				DAACFD6E1630A0F400D59EDD /* PadsonicPlayerManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1029,10 +1149,15 @@
 		DA1B48A71620E0F70039246A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PadSonic/PadSonic-Prefix.pch";
 				INFOPLIST_FILE = "PadSonic/PadSonic-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1040,10 +1165,15 @@
 		DA1B48A81620E0F70039246A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PadSonic/PadSonic-Prefix.pch";
 				INFOPLIST_FILE = "PadSonic/PadSonic-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
